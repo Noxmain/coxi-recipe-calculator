@@ -651,3 +651,37 @@ input[type="number"]::-webkit-outer-spin-button {
     grid-row: 3;
   }
 }
+
+/* ---- Date picker overlay (later rules win) ---- */
+
+/* The date input covers the weekday button, so a tap or click opens the native picker directly.
+   This works on iOS browsers, where a programmatic showPicker() call does not. */
+.row-date .row-date-input.visually-hidden {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  opacity: 0;
+  clip: auto;
+  overflow: hidden;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Chrome and Safari open the picker from the whole field, not only from the small calendar icon. */
+.row-date .row-date-input.visually-hidden::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* The overlay takes the pointer, so the hover of the weekday button is shown for the whole date block. */
+.row-date:hover .row-weekday {
+  background: var(--color-hover);
+}

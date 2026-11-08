@@ -3,6 +3,8 @@
 // inventory import, the Calculate button, the PDF downloads and the share dialog.
 // Results are never recalculated in the background. A relevant change hides
 // them, and the user has to press Calculate again.
+// The plan is also kept in the local storage of this browser, so the home screen
+// app still has it when it starts without a query string.
 import { isWholeNumberAtLeastOne, resolvePlan } from "./core/planner.js";
 import { calculateNeededAmounts, sumAmountsByType } from "./core/recipes.js";
 import { buildShoppingItems, groupByShop, summarizePrices } from "./core/shopping.js";
@@ -22,6 +24,9 @@ import { initShare } from "./ui/share.js";
 /** @typedef {import("./core/types.js").Recipe} Recipe */
 /** @typedef {import("./core/types.js").Ingredient} Ingredient */
 /** @typedef {import("./core/planner.js").PlanEntry} PlanEntry */
+
+/** Key in the local storage of this browser that holds the last plan query string. */
+const PLAN_STORAGE_KEY = "coxi-plan";
 
 const calculateButton = /** @type {HTMLButtonElement} */ (document.querySelector("#calculate"));
 const eventNameInput = /** @type {HTMLInputElement} */ (document.querySelector("#event-name"));
@@ -80,12 +85,45 @@ function renderNotices() {
 }
 
 /**
+ * Restores the saved plan if the page was opened without a query string, for
+ * example from the home screen. A link with a query string always wins.
+ */
+function restoreSavedPlan() {
+  if (location.search !== "") return;
+  const saved = readSavedPlan();
+  if (saved) {
+    history.replaceState(null, "", saved);
+  }
+}
+
+/** @returns {string | null} The saved query string, or null if there is none or storage is unavailable. */
+function readSavedPlan() {
+  try {
+    return localStorage.getItem(PLAN_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/** @param {string} query */
+function savePlan(query) {
+  try {
+    localStorage.setItem(PLAN_STORAGE_KEY, query);
+  } catch {
+    // Storage is not available, for example in some private browsing modes. The plan still works.
+  }
+}
+
+/**
  * @param {Ingredient[]} ingredients
  * @param {Recipe[]} recipes
  */
 function start(ingredients, recipes) {
   const ingredientsById = indexById(ingredients);
   const recipesById = indexById(recipes);
+
+  // Must run before the planner reads the address.
+  restoreSavedPlan();
 
   /** Snapshot of the plan and the people at the last calculation. Null when no result is shown. */
   let calculatedPlanKey = null;
@@ -127,16 +165,21 @@ function start(ingredients, recipes) {
     return JSON.stringify({ people: planner.getPeople(), rows: planner.getRows() });
   }
 
-  /** Called after every change of the plan: hides outdated results and updates the button and the address bar. */
+  /**
+   * Called after every change of the plan: hides outdated results, updates the
+   * button, the address bar and the saved plan.
+   */
   function updateControls() {
     if (calculatedPlanKey !== null && calculatedPlanKey !== planKey()) {
       hideResults();
     }
     calculateButton.disabled = readEntries().length === 0;
     try {
-      history.replaceState(null, "", planner.getQuery());
+      const query = planner.getQuery();
+      history.replaceState(null, "", query);
+      savePlan(query);
     } catch {
-      // The number of people is invalid right now. Keep the last valid address.
+      // The number of people is invalid right now. Keep the last valid address and saved plan.
     }
   }
 
