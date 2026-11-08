@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "ingredients": [
+    { "id": "almonds", "name": "Almonds", "unit": "g", "category": "Nuts and seeds", "packageSize": 200, "packagePrice": 2.49, "whereToBuy": "Supermarket" },
+    { "id": "baking-powder", "name": "Baking powder", "unit": "g", "category": "Baking", "packageSize": 15, "packagePrice": 0.79, "whereToBuy": "Supermarket" },
+    { "id": "chickpeas-dried", "name": "Chickpeas, dried", "unit": "g", "category": "Legumes", "packageSize": 500, "packagePrice": 1.20, "whereToBuy": "Wholesale market" },
+    { "id": "chili-powder", "name": "Chili powder", "unit": "g", "category": "Spices", "packageSize": 50, "packagePrice": 1.39, "whereToBuy": "Supermarket" },
+    { "id": "chopped-tomatoes", "name": "Chopped tomatoes", "unit": "can", "category": "Canned goods", "packageSize": 1, "packagePrice": 0.79, "whereToBuy": "Supermarket" },
+    { "id": "flour", "name": "Wheat flour", "unit": "g", "category": "Baking", "packageSize": 1000, "packagePrice": 1.10, "whereToBuy": "Supermarket" },
+    { "id": "garlic", "name": "Garlic", "unit": "clove", "category": "Vegetables", "packageSize": 10, "packagePrice": 0.45, "whereToBuy": "Weekly market" },
+    { "id": "lemon", "name": "Lemon", "unit": "piece", "category": "Fruit", "packageSize": 1, "packagePrice": 0.50 },
+    { "id": "oat-milk", "name": "Oat milk", "unit": "ml", "category": "Dairy alternatives", "packageSize": 1000, "packagePrice": 1.49, "whereToBuy": "Supermarket" },
+    { "id": "olive-oil", "name": "Olive oil", "unit": "ml", "category": "Oils and vinegar", "packageSize": 1000, "packagePrice": 6.90, "whereToBuy": "Wholesale market" },
+    { "id": "onion", "name": "Onion", "unit": "piece", "category": "Vegetables", "packageSize": 1, "packagePrice": 0.35, "whereToBuy": "Weekly market" },
+    { "id": "red-bell-pepper", "name": "Red bell pepper", "unit": "piece", "category": "Vegetables", "packageSize": 1, "packagePrice": 0.89, "whereToBuy": "Weekly market" },
+    { "id": "red-kidney-beans", "name": "Red kidney beans, cooked", "unit": "can", "category": "Canned goods", "packageSize": 1, "packagePrice": 0.89, "whereToBuy": "Supermarket" },
+    { "id": "salt", "name": "Salt", "unit": "g", "category": "Spices", "packageSize": 1000, "packagePrice": 0.60, "whereToBuy": "Supermarket" },
+    { "id": "textured-soy-granules", "name": "Textured soy granules", "unit": "g", "category": "Dry goods", "packageSize": 500, "packagePrice": 2.99, "whereToBuy": "Wholesale market" },
+    { "id": "vegetable-stock-powder", "name": "Vegetable stock powder", "unit": "g", "category": "Spices", "packageSize": 1000, "packagePrice": 4.50, "whereToBuy": "Wholesale market" },
+    { "id": "water", "name": "Water", "unit": "ml" }
+  ]
+}

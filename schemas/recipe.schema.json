@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Recipe",
+  "type": "object",
+  "required": ["schemaVersion", "id", "name", "type", "ingredients", "steps"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Stable identifier, equals the file name."
+    },
+    "name": { "type": "string", "minLength": 1 },
+    "type": {
+      "enum": ["main", "spread", "other"],
+      "description": "Used for grouping in the ingredient list and the recipe PDFs."
+    },
+    "servings": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "Number of people the ingredient amounts are written for. Defaults to 1."
+    },
+    "portionWeight": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Weight of one finished portion in g. Optional, display only."
+    },
+    "ingredients": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["ingredientId", "amount"],
+        "additionalProperties": false,
+        "properties": {
+          "ingredientId": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "amount": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "Amount for the basis servings, in the unit of the ingredient."
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

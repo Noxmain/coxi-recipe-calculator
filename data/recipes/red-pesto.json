@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "red-pesto",
+  "name": "Red Pesto",
+  "type": "spread",
+  "servings": 8,
+  "ingredients": [
+    { "ingredientId": "red-bell-pepper", "amount": 2 },
+    { "ingredientId": "almonds", "amount": 60 },
+    { "ingredientId": "garlic", "amount": 1 },
+    { "ingredientId": "olive-oil", "amount": 40 },
+    { "ingredientId": "lemon", "amount": 0.5 },
+    { "ingredientId": "salt", "amount": 3 }
+  ],
+  "steps": [
+    "Roast the peppers at 220 °C until the skin is blistered, then peel them and remove the seeds.",
+    "Toast the almonds in a dry pan until golden.",
+    "Blend all ingredients to a smooth paste and season with salt and lemon juice.",
+    "Store in a sealed jar in the fridge."
+  ]
+}

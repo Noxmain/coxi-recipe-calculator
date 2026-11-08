@@ -1,0 +1,12 @@
+{
+  "name": "coxi-recipe-calculator",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "validate": "node scripts/validate-data.js"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1"
+  }
+}

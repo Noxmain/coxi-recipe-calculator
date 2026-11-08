@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "pancakes",
+  "name": "Pancakes",
+  "type": "other",
+  "ingredients": [
+    { "ingredientId": "flour", "amount": 60 },
+    { "ingredientId": "oat-milk", "amount": 125 },
+    { "ingredientId": "baking-powder", "amount": 2 },
+    { "ingredientId": "olive-oil", "amount": 3 }
+  ],
+  "steps": [
+    "Whisk the oat milk with the olive oil, then stir in the flour and baking powder until smooth.",
+    "Let the batter rest for 5 minutes.",
+    "Bake thin pancakes in a lightly oiled pan, about 2 minutes per side. This makes two pancakes."
+  ]
+}

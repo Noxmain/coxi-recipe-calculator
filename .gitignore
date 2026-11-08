@@ -1,0 +1,11 @@
+# Dependencies, installed with npm ci or npm install
+node_modules/
+
+# Leftovers from npm pack, if a command was interrupted
+*.tgz
+package/
+
+# macOS and editor files
+.DS_Store
+.vscode/
+.idea/

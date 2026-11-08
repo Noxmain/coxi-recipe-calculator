@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "kind": "inventory",
+  "items": {
+    "chickpeas-dried": 10000,
+    "olive-oil": 500,
+    "red-kidney-beans": 2,
+    "onion": 3
+  }
+}

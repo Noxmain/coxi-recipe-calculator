@@ -1,0 +1,653 @@
+/* ============================================================
+   Coxi Recipe Calculator, main stylesheet
+   Sections: font, variables, base, page, title and people,
+   planner, results, inventory, notices, share dialog, mobile
+   ============================================================ */
+
+/* ---------- Font ---------- */
+/* The variable font is shipped in fonts/ so it works offline. */
+@font-face {
+  font-family: "Bricolage Grotesque Variable";
+  src: url("../fonts/BricolageGrotesque-Variable.woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+/* ---------- Variables ---------- */
+:root {
+  --color-background: #f7f1e5;
+  --color-hover: #fffbf3; /* background of every hovered element */
+  --color-text: #2b2118;
+  --color-accent: #f2b531; /* calculate button and round icon backgrounds */
+  --color-alert: #cf3f26; /* action texts, warnings, focus outline */
+  --color-line: #e3d6bd;
+  --color-faint: color-mix(in srgb, var(--color-text) 40%, transparent); /* icon buttons at rest */
+  --font-main: "Bricolage Grotesque Variable", system-ui, sans-serif;
+  --radius: 0.5rem;
+  --fade: 0.2s ease;
+}
+
+/* ---------- Base ---------- */
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-main);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Keyboard focus for buttons. Inputs show focus through their background. */
+button:focus-visible {
+  outline: 2px solid var(--color-alert);
+  outline-offset: 2px;
+}
+
+input:focus {
+  outline: none;
+}
+
+/* Every background change fades. */
+button,
+input,
+.option {
+  transition: background-color var(--fade);
+}
+
+/* Number inputs: no spin buttons, typing is enough. */
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.muted {
+  opacity: 0.7;
+}
+
+/* Icons. Each icon size is set in the context where it is used, see below. */
+.icon {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* ---------- Page ---------- */
+.page {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+.app-name {
+  margin: 0 0 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  opacity: 0.6;
+}
+
+/* ---------- Title and people count ---------- */
+/* Both look like plain text. On hover or focus they get a field background. */
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.event-name,
+.people input {
+  padding: 0.1rem 0.5rem;
+  margin-left: -0.5rem;
+  font: inherit;
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+}
+
+/* The width of both fields is set by js/ui/fit-input.js. */
+.event-name {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.people {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.people input {
+  width: 6rem;
+  min-width: 2ch;
+}
+
+.people span {
+  font-size: 1.1rem;
+  opacity: 0.7;
+}
+
+/* Share button at the right end of the title row. */
+.share-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-left: auto;
+  padding: 0;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.share-button .icon {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+/* ---------- Planner ---------- */
+.planner-section {
+  margin-bottom: 2.5rem;
+}
+
+.planner-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  border-bottom: 1px solid var(--color-line);
+}
+
+/* Round accent icon in front of the section headings. */
+.section-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One row per recipe. The row itself has no hover, only its fields do. */
+.row {
+  display: grid;
+  grid-template-columns: 9rem 1fr 5rem 2.5rem;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius);
+}
+
+.row-date {
+  position: relative;
+}
+
+.row-weekday {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: left;
+  white-space: nowrap;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.row-recipe-field {
+  position: relative;
+}
+
+/* Recipe name and portions share the same field style. */
+.row-recipe,
+.row-portions-input {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+}
+
+.row-recipe {
+  padding-right: 2.25rem; /* room for the toggle button */
+  font-weight: 600;
+}
+
+.row-portions-input {
+  text-align: center;
+}
+
+.row-recipe.row-unmatched {
+  color: var(--color-alert);
+}
+
+.row-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 2.25rem;
+  padding: 0;
+  font: inherit;
+  color: var(--color-text);
+  opacity: 0.5;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.row-toggle:hover {
+  opacity: 1;
+}
+
+/* Suggestion list: all recipes of the section, scrollable, filtered by the typed text. */
+.row-options {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  max-height: 16rem;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0.25rem;
+  list-style: none;
+  background: var(--color-hover);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 20px rgba(43, 33, 24, 0.12);
+}
+
+.option {
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.option:hover {
+  background: var(--color-background);
+}
+
+/* Remove button of a row. */
+.row-delete {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  font: inherit;
+  font-size: 1.25rem;
+  color: var(--color-faint);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+/* Text actions: add buttons, inventory buttons, download buttons and dialog buttons. */
+.add-row,
+.button-link,
+.download-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--color-alert);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.add-row {
+  margin-top: 0.25rem;
+}
+
+/* The only filled element on the page. */
+.calculate {
+  display: block;
+  width: 100%;
+  min-height: 3.5rem;
+  margin: 1rem 0 2.5rem;
+  font: inherit;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-text);
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.calculate:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- Hover ---------- */
+/* Every hoverable element gets the same hover background. Rows and sections never change. */
+.event-name:hover,
+.event-name:focus,
+.people input:hover,
+.people input:focus,
+.row-weekday:hover,
+.row-recipe:hover,
+.row-recipe:focus,
+.row-portions-input:hover,
+.row-portions-input:focus,
+.row-delete:hover,
+.add-row:hover,
+.button-link:hover,
+.download-button:hover,
+.share-button:hover,
+.share-close-button:hover,
+.share-option:hover {
+  background: var(--color-hover);
+}
+
+/* ---------- Inventory ---------- */
+.inventory-import {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.inventory-import p {
+  margin: 0;
+}
+
+/* ---------- Notices ---------- */
+.notices {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.notices li,
+.notice-text {
+  margin: 0 0 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--color-hover);
+  border-left: 4px solid var(--color-alert);
+  border-radius: var(--radius);
+}
+
+.notice-text {
+  color: var(--color-alert);
+}
+
+/* ---------- Results ---------- */
+.results {
+  margin-top: 1rem;
+}
+
+.downloads {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  margin-bottom: 2rem;
+}
+
+.summary {
+  margin-top: 2.5rem;
+}
+
+.summary h3 {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.summary dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.4rem 1.5rem;
+  margin: 0 0 1rem;
+}
+
+.summary dt {
+  font-weight: 600;
+}
+
+.summary dd {
+  margin: 0;
+}
+
+/* ---------- Share dialog ---------- */
+.share-dialog {
+  width: min(28rem, calc(100% - 2rem));
+  padding: 1.5rem;
+  color: var(--color-text);
+  background: var(--color-background);
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: 0 12px 40px rgba(43, 33, 24, 0.25);
+}
+
+.share-dialog::backdrop {
+  background: rgba(43, 33, 24, 0.45);
+}
+
+.share-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.share-dialog h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.share-close-button {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  font: inherit;
+  font-size: 1.25rem;
+  color: var(--color-faint);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+/* The body takes the full width of the dialog. */
+.share-body {
+  width: 100%;
+}
+
+.share-qr {
+  margin-bottom: 1rem;
+}
+
+/* QR code: fixed size, centered. Change the width here if needed. */
+.share-qr svg {
+  display: block;
+  width: 14rem;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.share-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Share options: icon in an accent circle, title and grey description. */
+.share-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  font: inherit;
+  color: var(--color-text);
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.share-option-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.share-option-icon .icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.share-option-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.share-option-title {
+  font-weight: 700;
+}
+
+.share-option-hint {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.share-paste-field,
+.share-confirm {
+  margin-top: 1rem;
+}
+
+.share-paste-field label {
+  display: block;
+}
+
+.share-paste-field input {
+  width: 100%;
+  min-height: 2.5rem;
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-hover);
+  border: none;
+  border-radius: var(--radius);
+}
+
+.share-confirm {
+  padding: 0.75rem;
+  background: var(--color-hover);
+  border-left: 4px solid var(--color-alert);
+  border-radius: var(--radius);
+}
+
+.share-confirm p {
+  margin: 0 0 0.5rem;
+}
+
+.share-confirm .share-actions {
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.share-message {
+  min-height: 1.5rem;
+  margin: 0.75rem 0 0;
+  color: var(--color-alert);
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 36rem) {
+  .page {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .event-name,
+  .people input {
+    font-size: 2rem;
+  }
+
+  .row {
+    grid-template-columns: 1fr 2.5rem;
+  }
+
+  .row-recipe-field {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .row-portions {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ingredient list",
+  "type": "object",
+  "required": ["schemaVersion", "ingredients"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "ingredients": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ingredient" }
+    }
+  },
+  "$defs": {
+    "ingredient": {
+      "type": "object",
+      "required": ["id", "name", "unit"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Stable identifier. Never change it after release."
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Free text. The only unit used for this ingredient: in recipes, inventory, shopping list and price. No conversion between units."
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Free text, e.g. 'Vegetables'. Used to sort the shopping list. Optional."
+        },
+        "packageSize": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Content of one package, in the ingredient's unit. Optional."
+        },
+        "packagePrice": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Price of one package. Optional."
+        },
+        "whereToBuy": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Shop where the ingredient is bought. Optional."
+        }
+      },
+      "dependentRequired": {
+        "packageSize": ["packagePrice"],
+        "packagePrice": ["packageSize"]
+      }
+    }
+  }
+}

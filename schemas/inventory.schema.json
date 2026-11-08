@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Inventory export",
+  "type": "object",
+  "required": ["schemaVersion", "kind", "items"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "kind": { "const": "inventory" },
+    "items": {
+      "type": "object",
+      "description": "Keys are ingredient ids. Amounts are always in the unit of the ingredient, never in packages.",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-z0-9]+(-[a-z0-9]+)*$": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

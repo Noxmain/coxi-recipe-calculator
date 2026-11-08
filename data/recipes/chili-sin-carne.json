@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "chili-sin-carne",
+  "name": "Chili Sin Carne",
+  "type": "main",
+  "servings": 4,
+  "portionWeight": 400,
+  "ingredients": [
+    { "ingredientId": "textured-soy-granules", "amount": 120 },
+    { "ingredientId": "vegetable-stock-powder", "amount": 20 },
+    { "ingredientId": "water", "amount": 1000 },
+    { "ingredientId": "onion", "amount": 2 },
+    { "ingredientId": "garlic", "amount": 2 },
+    { "ingredientId": "olive-oil", "amount": 30 },
+    { "ingredientId": "red-kidney-beans", "amount": 2 },
+    { "ingredientId": "chopped-tomatoes", "amount": 2 },
+    { "ingredientId": "chili-powder", "amount": 8 },
+    { "ingredientId": "salt", "amount": 5 }
+  ],
+  "steps": [
+    "Bring the water with the stock powder to a boil. Pour it over the soy granules and let them soak for 10 minutes until they have swollen.",
+    "Dice the onion and the garlic and sauté them in the olive oil until translucent.",
+    "Add the soaked soy granules, the drained kidney beans, the chopped tomatoes and the chili powder. Simmer for 20 minutes.",
+    "Season with salt and serve."
+  ]
+}

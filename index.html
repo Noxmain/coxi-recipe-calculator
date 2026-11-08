@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f1e5">
+  <title>Coxi Recipe Calculator</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="page">
+    <h1 class="app-name">Coxi Recipe Calculator</h1>
+
+    <div class="title-row">
+      <input id="event-name" class="event-name" type="text" placeholder="Event name" aria-label="Event name">
+      <button id="share-open" type="button" class="share-button" aria-label="Share plan" title="Share plan">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+      </button>
+    </div>
+
+    <label class="people">
+      <input id="people" type="number" min="1" step="1" value="100" aria-label="Number of people">
+      <span>People</span>
+    </label>
+
+    <section class="planner" aria-label="Plan">
+      <!-- One block per recipe type. Rows are added by js/ui/planner.js. -->
+      <section class="planner-section" data-type="main">
+        <h3>
+          <span class="section-icon">
+            <!-- Cooking pot -->
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7V5.5M10.5 5.5h3"/><path d="M5 10a7 3 0 0 1 14 0"/><path d="M5 10h14"/><path d="M5 10v7.5A2.5 2.5 0 0 0 7.5 20h9a2.5 2.5 0 0 0 2.5-2.5V10"/><path d="M5 12.5H2.5M19 12.5h2.5"/></svg>
+          </span>
+          Mains
+        </h3>
+        <ul class="rows"></ul>
+        <button type="button" class="add-row">+ Add main dish</button>
+      </section>
+
+      <section class="planner-section" data-type="spread">
+        <h3>
+          <span class="section-icon">
+            <!-- Jar -->
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="3" rx="1"/><path d="M8 6v1c-1.8.8-3 2.2-3 4.2V18a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-6.8c0-2-1.2-3.4-3-4.2V6"/><rect x="8.5" y="12.5" width="7" height="4.5" rx="1"/></svg>
+          </span>
+          Spreads
+        </h3>
+        <ul class="rows"></ul>
+        <button type="button" class="add-row">+ Add spread</button>
+      </section>
+
+      <section class="planner-section" data-type="other">
+        <h3>
+          <span class="section-icon">
+            <!-- Cake -->
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5c.9 1 1.3 1.7 1.3 2.3a1.3 1.3 0 0 1-2.6 0c0-.6.4-1.3 1.3-2.3z"/><path d="M12 11V9"/><path d="M5 20.5V13a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7.5"/><path d="M5 14.5q1.75 2 3.5 0t3.5 0t3.5 0t3.5 0"/><path d="M3 20.5h18"/></svg>
+          </span>
+          Others
+        </h3>
+        <ul class="rows"></ul>
+        <button type="button" class="add-row">+ Add other</button>
+      </section>
+    </section>
+
+    <section class="inventory-import" aria-label="Inventory">
+      <label class="button-link">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4m0 0-4 4m4-4 4 4M5 20h14"/></svg>
+        Load inventory file
+        <input id="inventory-file" class="visually-hidden" type="file" accept=".json,application/json">
+      </label>
+      <button id="inventory-remove" type="button" class="button-link" hidden>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+        Remove inventory
+      </button>
+      <p id="inventory-status" class="muted">No inventory loaded. Everything counts as not in stock.</p>
+    </section>
+
+    <ul id="notices" class="notices"></ul>
+
+    <button id="calculate" type="button" class="calculate" disabled>Calculate</button>
+
+    <!-- Download buttons and price estimate. Filled by js/ui/results.js. -->
+    <section id="results" class="results" hidden></section>
+  </main>
+
+  <!-- Share dialog. Opened by the share button, handled by js/ui/share.js. -->
+  <dialog id="share-dialog" class="share-dialog" aria-labelledby="share-title">
+    <header class="share-header">
+      <h2 id="share-title">Share plan</h2>
+      <button id="share-close" type="button" class="share-close-button" aria-label="Close">×</button>
+    </header>
+
+    <div class="share-body">
+      <div id="share-qr" class="share-qr"></div>
+
+      <div class="share-actions">
+        <button id="share-copy" type="button" class="share-option">
+          <span class="share-option-icon">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8V5.5A2.5 2.5 0 0 0 13.5 3h-7A2.5 2.5 0 0 0 4 5.5v8A2.5 2.5 0 0 0 6.5 16H8"/><rect x="8" y="8" width="12" height="13" rx="2.5"/></svg>
+          </span>
+          <span class="share-option-text">
+            <span class="share-option-title">Copy plan link</span>
+            <span class="share-option-hint">The whole plan is inside the link</span>
+          </span>
+        </button>
+
+        <button id="share-native" type="button" class="share-option" hidden>
+          <span class="share-option-icon">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0-12l-4 4m4-4l4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+          </span>
+          <span class="share-option-text">
+            <span class="share-option-title">Share plan link</span>
+            <span class="share-option-hint">Send the link with another app</span>
+          </span>
+        </button>
+
+        <button id="share-paste" type="button" class="share-option">
+          <span class="share-option-icon">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4.5H7.5A2.5 2.5 0 0 0 5 7v11.5A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V7a2.5 2.5 0 0 0-2.5-2.5H15"/><rect x="9" y="3" width="6" height="3" rx="1"/></svg>
+          </span>
+          <span class="share-option-text">
+            <span class="share-option-title">Paste plan link</span>
+            <span class="share-option-hint">For a link that opened in the browser instead of this app</span>
+          </span>
+        </button>
+      </div>
+
+      <div id="share-paste-field" class="share-paste-field" hidden>
+        <label>
+          Paste link here
+          <input id="share-paste-input" type="text" autocomplete="off" enterkeyhint="go">
+        </label>
+      </div>
+
+      <div id="share-confirm" class="share-confirm" hidden>
+        <p>
+          Replace the current plan? The current plan and any loaded inventory file will be removed.
+        </p>
+        <div class="share-actions">
+          <button id="share-confirm-replace" type="button" class="button-link">Replace plan</button>
+          <button id="share-confirm-cancel" type="button" class="button-link">Cancel</button>
+        </div>
+      </div>
+
+      <p id="share-message" class="share-message" role="status"></p>
+    </div>
+  </dialog>
+
+  <template id="row-template">
+    <li class="row">
+      <div class="row-date">
+        <button type="button" class="row-weekday">No date</button>
+        <input type="date" class="row-date-input visually-hidden" aria-label="Date" tabindex="-1">
+      </div>
+
+      <div class="row-recipe-field">
+        <input type="text" class="row-recipe" placeholder="Search recipe…" aria-label="Recipe" autocomplete="off">
+        <button type="button" class="row-toggle" aria-label="Show all recipes">▾</button>
+        <ul class="row-options" hidden></ul>
+      </div>
+
+      <label class="row-portions">
+        <span class="visually-hidden">Portions</span>
+        <input type="number" class="row-portions-input" min="1" step="1" value="1">
+      </label>
+
+      <button type="button" class="row-delete" aria-label="Remove recipe">×</button>
+    </li>
+  </template>
+
+  <script src="vendor/pdfmake/pdfmake.min.js"></script>
+  <script src="vendor/pdfmake/vfs_fonts.js"></script>
+  <script src="vendor/qrcode-generator/qrcode.js"></script>
+  <script type="module" src="js/pwa.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
