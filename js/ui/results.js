@@ -86,7 +86,9 @@ function renderSummary(summary) {
       "muted",
       `Price known for ${summary.pricedCount} of ${summary.itemCount} ingredients (${formatPercent(summary.pricedCount, summary.itemCount)}).`,
     ),
-    complete ? "" : el("p", "notice-text", "The totals are lower bounds, because some ingredients have no price."),
+    complete
+      ? ""
+      : el("p", "notice-text", "The price estimates are lower bounds, because some ingredients have no price."),
   );
 }
 

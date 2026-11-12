@@ -2,8 +2,23 @@
 // Number, money and date formatting for the screen and the PDFs.
 // Rounding happens here only, never in the calculation.
 
-const amountFormat = new Intl.NumberFormat("en", { maximumFractionDigits: 2 });
-const moneyFormat = new Intl.NumberFormat("en", { style: "currency", currency: "EUR" });
+/**
+ * Creates a formatter whose thousands separator is a space instead of a comma.
+ * The decimal separator stays a dot.
+ * @param {Intl.NumberFormatOptions} options
+ * @returns {(value: number) => string}
+ */
+function createSpacedNumberFormat(options) {
+  const formatter = new Intl.NumberFormat("en", options);
+  return (value) =>
+    formatter
+      .formatToParts(value)
+      .map((part) => (part.type === "group" ? " " : part.value))
+      .join("");
+}
+
+const amountFormat = createSpacedNumberFormat({ maximumFractionDigits: 2 });
+const moneyFormat = createSpacedNumberFormat({ style: "currency", currency: "EUR" });
 const dateFormat = new Intl.DateTimeFormat("en-GB", {
   weekday: "long",
   day: "numeric",
@@ -19,7 +34,7 @@ export const NO_PACKAGE_SIZE_TEXT = "-";
  * @returns {string}
  */
 export function formatAmount(value) {
-  return amountFormat.format(value);
+  return amountFormat(value);
 }
 
 /**
@@ -27,7 +42,7 @@ export function formatAmount(value) {
  * @returns {string}
  */
 export function formatMoney(value) {
-  return moneyFormat.format(value);
+  return moneyFormat(value);
 }
 
 /**

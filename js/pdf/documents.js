@@ -328,7 +328,7 @@ function summaryContent(summary) {
 
   if (summary.pricedCount < summary.itemCount) {
     content.push({
-      text: "The totals are lower bounds, because some ingredients have no price.",
+      text: "The price estimates are lower bounds, because some ingredients have no price.",
       color: ALERT,
     });
   }
