@@ -2,11 +2,16 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Inventory export",
   "type": "object",
-  "required": ["schemaVersion", "kind", "items"],
+  "required": ["schemaVersion", "kind", "name", "items"],
   "additionalProperties": false,
   "properties": {
     "schemaVersion": { "const": 1 },
     "kind": { "const": "inventory" },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Name of this inventory, for example 'Pantry May 2025'."
+    },
     "items": {
       "type": "object",
       "description": "Keys are ingredient ids. Amounts are always in the unit of the ingredient, never in packages.",

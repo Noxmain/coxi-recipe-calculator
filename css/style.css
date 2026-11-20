@@ -692,3 +692,57 @@ input[type="number"]::-webkit-outer-spin-button {
     grid-row: 3;
   }
 }
+
+/* ---------- Inventory page ---------- */
+/* Uses the row, field and hover styles above. One ingredient per row: name, amount, unit. */
+.inventory-search {
+  margin-bottom: 1rem;
+}
+
+.row.inventory-row {
+  grid-template-columns: 1fr 7rem 4rem;
+}
+
+.inventory-name {
+  min-width: 0;
+  padding: 0.4rem 0.5rem;
+  overflow-wrap: anywhere;
+}
+
+.inventory-unit {
+  padding-left: 0.25rem;
+}
+
+/* Links styled as buttons must not be underlined. */
+a.button-link {
+  text-decoration: none;
+}
+
+/* Actions under the inventory name, in one row. */
+.inventory-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.inventory-actions .button-link {
+  margin: 0;
+}
+
+/* Search field that stands out from the background. */
+.inventory-search {
+  min-height: 3rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 400;
+  background: var(--color-hover);
+  border: 1px solid var(--color-line);
+}
+
+/* Settings menu link, styled like the other options. */
+a.share-option {
+  text-decoration: none;
+}

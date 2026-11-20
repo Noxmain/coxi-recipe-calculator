@@ -147,9 +147,8 @@ function start(ingredients, recipes) {
       return url.href;
     },
     readPlanFromText,
-    hasPlanContent: () =>
-      planner.getRows().some((row) => row.recipeId !== null) ||
-      Object.keys(inventoryImport.getInventory()).length > 0,
+    // The inventory stays in the local storage, so only the planned recipes would be replaced.
+    hasPlanContent: () => planner.getRows().some((row) => row.recipeId !== null),
     replacePlan: (search) => {
       // Loading the address with the new query reloads the page with that plan.
       location.search = search;

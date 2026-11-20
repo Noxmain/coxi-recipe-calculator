@@ -17,8 +17,8 @@
     <div class="title-row">
       <img class="app-logo" src="icons/icon.svg" alt="" width="40" height="40">
       <input id="event-name" class="event-name" type="text" placeholder="Event name" aria-label="Event name">
-      <button id="share-open" type="button" class="share-button" aria-label="Share plan" title="Share plan">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+      <button id="share-open" type="button" class="share-button" aria-label="Settings" title="Settings">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
       </button>
     </div>
 
@@ -87,7 +87,7 @@
     <section id="results" class="results" hidden></section>
   </main>
 
-  <!-- Share dialog. Opened by the share button, handled by js/ui/share.js. -->
+  <!-- Settings dialog. Opened by the settings button, handled by js/ui/share.js. -->
   <dialog id="share-dialog" class="share-dialog" aria-labelledby="share-title">
     <header class="share-header">
       <h2 id="share-title">Share plan</h2>
@@ -127,6 +127,16 @@
             <span class="share-option-hint">For a link that opened in the browser instead of this app</span>
           </span>
         </button>
+
+        <a class="share-option" href="inventory/">
+          <span class="share-option-icon">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
+          </span>
+          <span class="share-option-text">
+            <span class="share-option-title">Edit inventory</span>
+            <span class="share-option-hint">Amounts you have at home</span>
+          </span>
+        </a>
       </div>
 
       <div id="share-paste-field" class="share-paste-field" hidden>
@@ -138,7 +148,7 @@
 
       <div id="share-confirm" class="share-confirm" hidden>
         <p>
-          Replace the current plan? The current plan and any loaded inventory file will be removed.
+          Replace the current plan? The current plan will be removed.
         </p>
         <div class="share-actions">
           <button id="share-confirm-replace" type="button" class="button-link">Replace plan</button>

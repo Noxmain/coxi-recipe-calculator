@@ -9,15 +9,22 @@
  */
 const CACHE_VERSION = "coxi-v1";
 
-/** Files of the app shell, relative to this file. Recipe files are added during install. */
+/**
+ * Files of the app shell, relative to this file. Recipe files are added during install.
+ * Every new JavaScript, CSS or HTML file must be listed here, or it is missing offline.
+ */
 const SHELL_FILES = [
   "./",
   "index.html",
+  "inventory/",
+  "inventory/index.html",
   "manifest.webmanifest",
   "css/style.css",
   "fonts/BricolageGrotesque-Variable.woff2",
   "icons/icon.svg",
+  "icons/apple-touch-icon.png",
   "js/app.js",
+  "js/inventory-page.js",
   "js/pwa.js",
   "js/core/format.js",
   "js/core/inventory.js",
@@ -28,8 +35,10 @@ const SHELL_FILES = [
   "js/core/utils.js",
   "js/core/validation.js",
   "js/pdf/documents.js",
+  "js/pdf/inventory-pdf.js",
   "js/ui/fit-input.js",
   "js/ui/inventory-import.js",
+  "js/ui/inventory-storage.js",
   "js/ui/planner.js",
   "js/ui/results.js",
   "js/ui/share.js",
@@ -89,14 +98,12 @@ self.addEventListener("fetch", (event) => {
 
 /**
  * Tries the network first and stores the answer. Offline, the stored answer is used.
- * Page loads always use the stored index.html, because the plan lives in the query string.
  * @param {Request} request
  * @returns {Promise<Response>}
  */
 async function networkFirst(request) {
   const cache = await caches.open(CACHE_VERSION);
-  const isPage = request.mode === "navigate";
-  const key = isPage ? appUrl("index.html") : request;
+  const key = cacheKey(request);
 
   try {
     const response = await fetch(request);
@@ -112,4 +119,16 @@ async function networkFirst(request) {
       statusText: "Offline",
     });
   }
+}
+
+/**
+ * Pages are stored without their query string, so every plan (?p=…&r=…) is served
+ * by the stored page of the same address. Other files are stored by their full URL.
+ * @param {Request} request
+ * @returns {Request | string}
+ */
+function cacheKey(request) {
+  if (request.mode !== "navigate") return request;
+  const url = new URL(request.url);
+  return url.origin + url.pathname;
 }

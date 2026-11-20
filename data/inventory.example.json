@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "inventory",
+  "name": "Example inventory",
   "items": {
     "chickpeas-dried": 10000,
     "olive-oil": 500,

@@ -1,7 +1,8 @@
 // @ts-check
-// Loads an inventory export from the user's disk. The inventory is kept in
-// memory only and is never written to the URL.
+// Inventory section of the main page: shows the stored inventory, loads an inventory
+// file and removes the inventory. Editing happens on the inventory page.
 import { parseInventory } from "../core/inventory.js";
+import { clearStoredInventory, loadStoredInventory, saveStoredInventory } from "./inventory-storage.js";
 
 /** @typedef {import("../core/types.js").Ingredient} Ingredient */
 /** @typedef {import("../core/types.js").Inventory} Inventory */
@@ -9,7 +10,7 @@ import { parseInventory } from "../core/inventory.js";
 const NO_INVENTORY_TEXT = "No inventory loaded. Everything counts as not in stock.";
 
 /**
- * Connects the inventory file input and the remove button of the main page.
+ * Connects the inventory controls of the main page.
  * @param {Map<string, Ingredient>} ingredientsById
  * @param {(messages: string[]) => void} onChange Called after every load or removal
  *   with the warnings or errors to show.
@@ -22,16 +23,26 @@ export function initInventoryImport(ingredientsById, onChange) {
 
   /** @type {Inventory} */
   let inventory = {};
+  let name = "";
+
+  const stored = loadStoredInventory(ingredientsById);
+  if (stored) {
+    name = stored.name;
+    inventory = stored.inventory;
+  }
+  showStatus();
+  removeButton.hidden = stored === null;
 
   fileInput.addEventListener("change", async () => {
     const file = fileInput.files?.[0];
     if (!file) return;
 
     try {
-      const data = JSON.parse(await file.text());
-      const result = parseInventory(data, ingredientsById);
+      const result = parseInventory(JSON.parse(await file.text()), ingredientsById);
+      name = result.name;
       inventory = result.inventory;
-      status.textContent = `Loaded ${file.name}: ${Object.keys(inventory).length} items.`;
+      saveStoredInventory(name, inventory);
+      showStatus();
       removeButton.hidden = false;
       onChange(result.warnings);
     } catch (error) {
@@ -44,11 +55,20 @@ export function initInventoryImport(ingredientsById, onChange) {
   });
 
   removeButton.addEventListener("click", () => {
+    clearStoredInventory();
     inventory = {};
-    status.textContent = NO_INVENTORY_TEXT;
+    name = "";
+    showStatus();
     removeButton.hidden = true;
     onChange([]);
   });
+
+  function showStatus() {
+    status.textContent =
+      name === ""
+        ? NO_INVENTORY_TEXT
+        : `Inventory "${name}" is in use (${Object.keys(inventory).length} items).`;
+  }
 
   return { getInventory: () => inventory };
 }
