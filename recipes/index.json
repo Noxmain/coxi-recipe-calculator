@@ -1,4 +1,8 @@
 {
   "schemaVersion": 1,
-  "recipes": ["chili-sin-carne", "pancakes", "red-pesto"]
+  "recipes": [
+    "chili-sin-carne",
+    "pancakes",
+    "red-pesto"
+  ]
 }

@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "validate": "node scripts/validate-data.js"
+    "validate": "node scripts/validate-data.js",
+    "build-index": "node scripts/build-index.js"
   },
   "devDependencies": {
     "ajv": "^8.17.1"

@@ -4,7 +4,7 @@
 // Results are never recalculated in the background. A relevant change hides
 // them, and the user has to press Calculate again.
 import { isWholeNumberAtLeastOne, resolvePlan } from "../core/planner.js";
-import { calculateNeededAmounts, sumAmountsByType } from "../core/recipes.js";
+import { calculateNeededAmounts, mergeRecipes, sumAmountsByType } from "../core/recipes.js";
 import { buildShoppingItems, groupByShop, summarizePrices } from "../core/shopping.js";
 import { indexById } from "../core/utils.js";
 import {
@@ -14,7 +14,7 @@ import {
   buildShoppingPdf,
   buildSortingPdf,
 } from "../pdf/documents.js";
-import { readSavedPlan, savePlan } from "../storage.js";
+import { readLocalRecipes, readSavedPlan, savePlan } from "../storage.js";
 import { fitInputWidth } from "../ui/fit-input.js";
 import { initInventoryImport } from "../ui/inventory-import.js";
 import { initPlanner } from "../ui/planner.js";
@@ -24,6 +24,9 @@ import { initShare } from "../ui/share.js";
 /** @typedef {import("../core/types.js").Recipe} Recipe */
 /** @typedef {import("../core/types.js").Ingredient} Ingredient */
 /** @typedef {import("../core/planner.js").PlanEntry} PlanEntry */
+
+/** Key in the local storage of this browser that holds the last plan query string. */
+const PLAN_STORAGE_KEY = "coxi-plan";
 
 const calculateButton = /** @type {HTMLButtonElement} */ (document.querySelector("#calculate"));
 const eventNameInput = /** @type {HTMLInputElement} */ (document.querySelector("#event-name"));
@@ -39,12 +42,16 @@ const notices = { loading: [], plan: [], inventory: [], calculation: [] };
 
 main();
 
-/** Loads all data files, then starts the page. Shows an error notice if loading fails. */
+/**
+ * Loads all data files, then starts the page. Recipes saved in this browser replace
+ * or extend the repository recipes. Shows an error notice if loading fails.
+ */
 async function main() {
   try {
     const { ingredients } = await loadJson("ingredients/ingredients.json");
     const { recipes: recipeIds } = await loadJson("recipes/index.json");
-    const recipes = await Promise.all(recipeIds.map((id) => loadJson(`recipes/${id}.json`)));
+    const repoRecipes = await Promise.all(recipeIds.map((id) => loadJson(`recipes/${id}.json`)));
+    const recipes = mergeRecipes(repoRecipes, readLocalRecipes());
     start(ingredients, recipes);
   } catch (error) {
     notices.loading = [`The data could not be loaded. ${/** @type {Error} */ (error).message}`];

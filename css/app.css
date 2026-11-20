@@ -423,3 +423,188 @@
     grid-row: 3;
   }
 }
+
+/* ---------- Recipe page ---------- */
+/* The title of a recipe takes the full width of the page. */
+.recipe-name {
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+/* Field group for type, servings, portion weight and the scale option. */
+.recipe-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.field > span {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.field select,
+.field input[type="number"] {
+  min-height: 2.5rem;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+}
+
+.field select:hover,
+.field select:focus,
+.field input[type="number"]:hover,
+.field input[type="number"]:focus {
+  background: var(--color-hover);
+}
+
+.field select:focus {
+  outline: none;
+}
+
+/* Checkbox option: a row with the box in front of the text. */
+.field.check {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.field.check input {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 0;
+}
+
+.field.check > span {
+  font-size: inherit;
+  opacity: 1;
+}
+
+/* Recipe row in the list: name button on the left, PDF button on the right. */
+.row.recipe-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.recipe-open {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.recipe-open:hover {
+  background: var(--color-hover);
+}
+
+.recipe-marker {
+  font-size: 0.8rem;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+/* Ingredient row in the editor: search, amount, unit, remove. */
+.row.ingredient-row {
+  grid-template-columns: minmax(0, 1fr) 6rem 3.5rem 2.5rem;
+}
+
+.row.ingredient-row .row-recipe-field,
+.row.ingredient-row .row-portions {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+.ingredient-unit {
+  padding-left: 0.25rem;
+}
+
+/* Working steps: numbered list, each step with a text area and a remove button. */
+.step-list {
+  margin: 0;
+  padding: 0 0 0 2rem;
+}
+
+.step-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 2.5rem;
+  gap: 0.5rem;
+  align-items: start;
+  margin-bottom: 0.25rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius);
+}
+
+.step-text {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+  resize: vertical;
+}
+
+.step-text:hover,
+.step-text:focus {
+  background: var(--color-hover);
+}
+
+.step-text:focus {
+  outline: none;
+}
+
+@media (max-width: 36rem) {
+  .row.ingredient-row {
+    grid-template-columns: minmax(0, 1fr) 4.5rem 3rem 2.5rem;
+  }
+}
+
+/* Page title next to the logo. Same size as the event name, but not an input. */
+.page-title {
+  margin: 0;
+  padding: 0.1rem 0.5rem;
+  margin-left: -0.5rem;
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+/* JSON and PDF download buttons side by side at the end of a recipe row. */
+.recipe-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+@media (max-width: 36rem) {
+  .page-title {
+    font-size: 2rem;
+  }
+}
+
+/* Button inside a section heading, pushed to the right. Its height stays inside the heading line. */
+.heading-action {
+  margin: -0.25rem 0 -0.25rem auto;
+  padding: 0.1rem 0.5rem;
+  font-size: 1rem;
+}

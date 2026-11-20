@@ -5,9 +5,11 @@ import { buildInventoryFile, parseInventory } from "./core/inventory.js";
 
 /** @typedef {import("./core/types.js").Ingredient} Ingredient */
 /** @typedef {import("./core/types.js").Inventory} Inventory */
+/** @typedef {import("./core/types.js").Recipe} Recipe */
 
 const PLAN_KEY = "coxi-plan";
 const INVENTORY_KEY = "coxi-inventory";
+const RECIPES_KEY = "coxi-recipes";
 
 /**
  * @typedef {Object} StoredInventory
@@ -75,11 +77,50 @@ export function clearStoredInventory() {
   }
 }
 
-/** Deletes all data this app keeps in this browser: the saved plan and the inventory. */
+/**
+ * @returns {Record<string, Recipe>} Recipes saved in this browser, by id. Empty if none or unreadable.
+ */
+export function readLocalRecipes() {
+  try {
+    const data = JSON.parse(localStorage.getItem(RECIPES_KEY) ?? "{}");
+    return data !== null && typeof data === "object" && !Array.isArray(data) ? data : {};
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Saves a recipe in this browser. An existing saved recipe with the same id is replaced.
+ * @param {Recipe} recipe
+ */
+export function saveLocalRecipe(recipe) {
+  try {
+    localStorage.setItem(RECIPES_KEY, JSON.stringify({ ...readLocalRecipes(), [recipe.id]: recipe }));
+  } catch {
+    // Storage is not available, so the recipe cannot be kept.
+  }
+}
+
+/**
+ * Removes the saved version of a recipe. A repository recipe with the same id is used again.
+ * @param {string} id
+ */
+export function deleteLocalRecipe(id) {
+  try {
+    const recipes = readLocalRecipes();
+    delete recipes[id];
+    localStorage.setItem(RECIPES_KEY, JSON.stringify(recipes));
+  } catch {
+    // Storage is not available, so there is nothing to remove.
+  }
+}
+
+/** Deletes all data this app keeps in this browser: plan, inventory and saved recipes. */
 export function clearAllLocalData() {
   clearStoredInventory();
   try {
     localStorage.removeItem(PLAN_KEY);
+    localStorage.removeItem(RECIPES_KEY);
   } catch {
     // Storage is not available, so there is nothing to remove.
   }

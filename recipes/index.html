@@ -9,21 +9,111 @@
   <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/app.css">
 </head>
 <body>
   <main class="page">
     <h1 class="app-name">Coxi Recipe Calculator Recipes</h1>
 
-    <div class="inventory-actions">
-      <a class="button-link" href="../">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m0 0 6-6m-6 6 6 6"/></svg>
-        Back to plan
-      </a>
+    <!-- List of all recipes. Shown by default. -->
+    <div id="list-view">
+      <div class="title-row">
+        <img class="app-logo" src="../icons/icon.svg" alt="" width="40" height="40">
+        <h2 class="page-title">Recipes</h2>
+      </div>
+
+      <div class="inventory-actions">
+        <a class="button-link" href="../">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m0 0 6-6m-6 6 6 6"/></svg>
+          Back to plan
+        </a>
+        <button id="new-recipe" type="button" class="button-link">+ New recipe</button>
+        <label class="button-link">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4m0 0-4 4m4-4 4 4M5 20h14"/></svg>
+          Import recipe file
+          <input id="recipe-file" class="visually-hidden" type="file" accept=".json,application/json">
+        </label>
+        <!-- Placeholder: replace "#" with the GitHub link to the user guide in docs/ once it exists. -->
+        <a id="help-link" class="button-link" href="#">? Help</a>
+      </div>
+
+      <input id="recipe-search" class="row-recipe inventory-search" type="search" placeholder="Search recipe…" aria-label="Search recipe" autocomplete="off">
+
+      <ul id="notices" class="notices"></ul>
+
+      <!-- Recipes grouped by type. Filled by js/pages/recipes.js. -->
+      <div id="recipe-list"></div>
     </div>
 
-    <p class="muted">Coming soon.</p>
+    <!-- Editor for one recipe. Hidden until a recipe is opened or created. -->
+    <div id="editor-view" hidden>
+      <div class="title-row">
+        <img class="app-logo" src="../icons/icon.svg" alt="" width="40" height="40">
+        <input id="recipe-name" class="event-name recipe-name" type="text" placeholder="Recipe name" aria-label="Recipe name">
+      </div>
+
+      <div class="inventory-actions">
+        <button id="editor-back" type="button" class="button-link">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m0 0 6-6m-6 6 6 6"/></svg>
+          Back to recipes
+        </button>
+      </div>
+
+      <div class="recipe-fields">
+        <label class="field">
+          <span>Type</span>
+          <select id="recipe-type">
+            <option value="main">Main dish</option>
+            <option value="spread">Spread</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Servings (people)</span>
+          <input id="recipe-servings" type="number" min="1" step="1">
+        </label>
+        <label class="field">
+          <span>Portion weight (g)</span>
+          <input id="recipe-portion-weight" type="number" min="0" step="any">
+        </label>
+      </div>
+
+      <section class="planner-section">
+        <h3>
+          Ingredients
+          <!-- Sits on the heading line, so showing or hiding it does not move the page. -->
+          <button id="scale-button" type="button" class="button-link heading-action" hidden>Scale ingredients</button>
+        </h3>
+        <ul id="editor-ingredients" class="rows"></ul>
+        <button id="add-ingredient" type="button" class="add-row">+ Add ingredient</button>
+      </section>
+
+      <section class="planner-section">
+        <h3>Working steps</h3>
+        <ol id="editor-steps" class="step-list"></ol>
+        <button id="add-step" type="button" class="add-row">+ Add step</button>
+      </section>
+
+      <ul id="editor-errors" class="notices"></ul>
+
+      <button id="save-recipe" type="button" class="calculate">Save in this browser</button>
+
+      <div class="downloads">
+        <button id="download-recipe" type="button" class="download-button">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>
+          Download recipe file
+        </button>
+        <button id="discard-recipe" type="button" class="button-link" hidden>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+          <span id="discard-label"></span>
+        </button>
+      </div>
+    </div>
   </main>
 
+  <script src="../vendor/pdfmake/pdfmake.min.js"></script>
+  <script src="../vendor/pdfmake/vfs_fonts.js"></script>
   <script type="module" src="../js/pwa.js"></script>
+  <script type="module" src="../js/pages/recipes.js"></script>
 </body>
 </html>

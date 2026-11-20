@@ -5,11 +5,18 @@ on:
   push:
     branches: [main]
 
+# Needed to push the updated recipe index back to a pull request branch.
+permissions:
+  contents: write
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # On pull requests, check out the branch itself, not the merge commit.
+          ref: ${{ github.head_ref || github.ref }}
 
       - uses: actions/setup-node@v4
         with:
@@ -18,8 +25,25 @@ jobs:
 
       - run: npm ci
 
+      - name: Update recipe index
+        run: npm run build-index
+
       - name: Run tests
         run: npm test
 
       - name: Validate data files
         run: npm run validate
+
+      - name: Commit updated recipe index
+        # Pushing to forks is not possible with this token, so only same-repository pull requests get the commit.
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          if git diff --quiet -- recipes/index.json; then
+            echo "Recipe index is up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add recipes/index.json
+          git commit -m "Update recipe index"
+          git push origin HEAD:"${{ github.head_ref }}"

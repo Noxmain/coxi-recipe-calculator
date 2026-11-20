@@ -148,3 +148,20 @@ export function sumAmountsByType(entries, ingredientsById) {
     other: toSortedList(totals.other),
   };
 }
+
+/**
+ * Combines the recipes of the repository with the recipes saved in this browser.
+ * A saved recipe replaces the repository recipe with the same id. Saved recipes
+ * without a repository counterpart are added at the end.
+ * @param {Recipe[]} repoRecipes
+ * @param {Record<string, Recipe>} localRecipes
+ * @returns {Recipe[]}
+ */
+export function mergeRecipes(repoRecipes, localRecipes) {
+  const repoIds = new Set(repoRecipes.map((recipe) => recipe.id));
+  const replaced = repoRecipes.map((recipe) =>
+    Object.hasOwn(localRecipes, recipe.id) ? localRecipes[recipe.id] : recipe,
+  );
+  const added = Object.values(localRecipes).filter((recipe) => !repoIds.has(recipe.id));
+  return [...replaced, ...added];
+}
