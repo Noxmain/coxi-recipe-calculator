@@ -6,7 +6,9 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { collectDataErrors } from "../scripts/validate-data.js";
 
-const realDataDir = fileURLToPath(new URL("../data", import.meta.url));
+const projectRoot = fileURLToPath(new URL("..", import.meta.url));
+/** Folders that contain the data files. */
+const DATA_FOLDERS = ["ingredients", "inventory", "recipes"];
 
 /**
  * Copies the real data, applies a change to the copy and runs the check on it.
@@ -16,9 +18,11 @@ const realDataDir = fileURLToPath(new URL("../data", import.meta.url));
 function checkAfterChange(change) {
   const dir = mkdtempSync(join(tmpdir(), "coxi-data-"));
   try {
-    cpSync(realDataDir, dir, { recursive: true });
+    for (const folder of DATA_FOLDERS) {
+      cpSync(join(projectRoot, folder), join(dir, folder), { recursive: true });
+    }
     change(dir);
-    return collectDataErrors({ dataDir: dir });
+    return collectDataErrors({ rootDir: dir });
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -27,7 +31,7 @@ function checkAfterChange(change) {
 /**
  * Changes one JSON file inside the temporary copy.
  * @param {string} dir
- * @param {string} file Path relative to the data folder.
+ * @param {string} file Path relative to the data root, e.g. "recipes/index.json".
  * @param {(data: any) => void} edit
  */
 function editJson(dir, file, edit) {
@@ -43,11 +47,14 @@ test("the real data passes the validation script", () => {
 
 test("a misspelled property in an ingredient is reported", () => {
   const errors = checkAfterChange((dir) =>
-    editJson(dir, "ingredients.json", (data) => {
+    editJson(dir, "ingredients/ingredients.json", (data) => {
       data.ingredients[0].packageSzie = 500;
     }),
   );
-  assert.ok(errors.some((error) => error.startsWith("ingredients.json")), errors.join("\n"));
+  assert.ok(
+    errors.some((error) => error.startsWith("ingredients/ingredients.json")),
+    errors.join("\n"),
+  );
 });
 
 test("a recipe with an unknown ingredient is reported", () => {

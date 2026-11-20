@@ -9,6 +9,7 @@
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
   <main class="page">
@@ -137,6 +138,36 @@
             <span class="share-option-hint">Amounts you have at home</span>
           </span>
         </a>
+
+        <a class="share-option" href="recipes/">
+          <span class="share-option-icon">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v15H6a2 2 0 0 0-2 2z"/><path d="M4 20V5"/><path d="M9 8h6"/></svg>
+          </span>
+          <span class="share-option-text">
+            <span class="share-option-title">Edit recipes</span>
+            <span class="share-option-hint">Browse, change and add recipes</span>
+          </span>
+        </a>
+
+        <a class="share-option" href="ingredients/">
+          <span class="share-option-icon">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l7-7"/></svg>
+          </span>
+          <span class="share-option-text">
+            <span class="share-option-title">Edit ingredients</span>
+            <span class="share-option-hint">Units, prices and shops</span>
+          </span>
+        </a>
+
+        <button id="data-reset" type="button" class="share-option share-option-danger">
+          <span class="share-option-icon">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+          </span>
+          <span class="share-option-text">
+            <span class="share-option-title">Delete all local data</span>
+            <span class="share-option-hint">Removes the saved plan and the saved inventory from this browser</span>
+          </span>
+        </button>
       </div>
 
       <div id="share-paste-field" class="share-paste-field" hidden>
@@ -186,6 +217,7 @@
   <script src="vendor/pdfmake/vfs_fonts.js"></script>
   <script src="vendor/qrcode-generator/qrcode.js"></script>
   <script type="module" src="js/pwa.js"></script>
-  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/ui/reset-data.js"></script>
+  <script type="module" src="js/pages/main.js"></script>
 </body>
 </html>

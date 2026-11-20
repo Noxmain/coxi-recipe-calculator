@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   LABEL_LAYOUT,
+  buildInventoryPdf,
   buildLabelsPdf,
   buildRecipesPdf,
   buildShoppingPdf,
@@ -83,4 +84,19 @@ test("the sorting list shows the amounts per type", () => {
   const text = JSON.stringify(definition);
   assert.ok(text.includes("3 piece"));
   assert.ok(text.includes("45 ml"));
+});
+
+test("the inventory PDF contains the inventory name and the amounts with their unit", () => {
+  const definition = buildInventoryPdf("Pantry", [
+    { title: "Oils", items: [{ name: "Olive oil", amount: 500, unit: "ml" }] },
+  ]);
+  const text = JSON.stringify(definition);
+  assert.ok(text.includes("Inventory: Pantry"));
+  assert.ok(text.includes("500 ml"));
+  assert.ok(text.includes("Oils"));
+});
+
+test("an empty inventory PDF says that nothing is in stock", () => {
+  const definition = buildInventoryPdf("Pantry", []);
+  assert.ok(JSON.stringify(definition).includes("Nothing in stock."));
 });

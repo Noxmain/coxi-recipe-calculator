@@ -21,6 +21,19 @@ import { compareText, requireIngredient } from "../core/utils.js";
 /** @typedef {import("../core/recipes.js").TypeAmount} TypeAmount */
 
 /**
+ * @typedef {Object} InventoryPdfItem
+ * @property {string} name
+ * @property {number} amount
+ * @property {string} unit
+ */
+
+/**
+ * @typedef {Object} InventoryPdfSection
+ * @property {string} title Category name.
+ * @property {InventoryPdfItem[]} items
+ */
+
+/**
  * Label grid per A4 portrait page. Only the counts are set here, never a label size.
  * @type {{ columns: number, rows: number }}
  */
@@ -131,36 +144,13 @@ export function buildSortingPdf(amountsByType) {
   const content = [{ text: "Ingredient sorting list", style: "title" }];
   for (const type of TYPE_ORDER) {
     content.push({ text: TYPE_TITLES[type], style: "heading" });
-    content.push(sortingTable(amountsByType[type]));
+    content.push(
+      amountTable(
+        amountsByType[type].map((item) => ({ name: item.name, amount: item.amount, unit: item.unit })),
+      ),
+    );
   }
   return createDocument(content, "Ingredient sorting list");
-}
-
-/**
- * @param {TypeAmount[]} items
- * @returns {any}
- */
-function sortingTable(items) {
-  if (items.length === 0) {
-    return { text: "None", style: "muted" };
-  }
-  return {
-    table: {
-      headerRows: 1,
-      widths: ["*", "auto"],
-      body: [
-        [
-          { text: "Ingredient", style: "tableHeader" },
-          { text: "Amount", style: "tableHeader", alignment: "right" },
-        ],
-        ...items.map((item) => [
-          item.name,
-          { text: `${formatAmount(item.amount)} ${item.unit}`, alignment: "right" },
-        ]),
-      ],
-    },
-    layout: "lightHorizontalLines",
-  };
 }
 
 /**
@@ -232,6 +222,55 @@ function labelPage(cells) {
       body,
     },
     layout: dashedGrid,
+  };
+}
+
+/**
+ * Inventory of the stored amounts, one section per category.
+ * @param {string} name
+ * @param {InventoryPdfSection[]} sections
+ * @returns {Record<string, any>}
+ */
+export function buildInventoryPdf(name, sections) {
+  const title = `Inventory: ${name}`;
+
+  /** @type {any[]} */
+  const content = [{ text: title, style: "title" }];
+  if (sections.length === 0) {
+    content.push({ text: "Nothing in stock.", style: "muted" });
+  }
+  for (const section of sections) {
+    content.push({ text: section.title, style: "heading" });
+    content.push(amountTable(section.items));
+  }
+  return createDocument(content, title);
+}
+
+/**
+ * Two-column table with name and amount, used by the sorting list and the inventory.
+ * @param {InventoryPdfItem[]} items
+ * @returns {any}
+ */
+function amountTable(items) {
+  if (items.length === 0) {
+    return { text: "None", style: "muted" };
+  }
+  return {
+    table: {
+      headerRows: 1,
+      widths: ["*", "auto"],
+      body: [
+        [
+          { text: "Ingredient", style: "tableHeader" },
+          { text: "Amount", style: "tableHeader", alignment: "right" },
+        ],
+        ...items.map((item) => [
+          item.name,
+          { text: `${formatAmount(item.amount)} ${item.unit}`, alignment: "right" },
+        ]),
+      ],
+    },
+    layout: "lightHorizontalLines",
   };
 }
 

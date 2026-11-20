@@ -1,32 +1,29 @@
 // @ts-check
-// Entry point of the main page. Loads the data, wires the planner, the
-// inventory import, the Calculate button, the PDF downloads and the share dialog.
+// Entry point of the main page. Loads the data, wires the planner, the inventory
+// import, the Calculate button, the PDF downloads and the settings dialog.
 // Results are never recalculated in the background. A relevant change hides
 // them, and the user has to press Calculate again.
-// The plan is also kept in the local storage of this browser, so the home screen
-// app still has it when it starts without a query string.
-import { isWholeNumberAtLeastOne, resolvePlan } from "./core/planner.js";
-import { calculateNeededAmounts, sumAmountsByType } from "./core/recipes.js";
-import { buildShoppingItems, groupByShop, summarizePrices } from "./core/shopping.js";
-import { indexById } from "./core/utils.js";
+import { isWholeNumberAtLeastOne, resolvePlan } from "../core/planner.js";
+import { calculateNeededAmounts, sumAmountsByType } from "../core/recipes.js";
+import { buildShoppingItems, groupByShop, summarizePrices } from "../core/shopping.js";
+import { indexById } from "../core/utils.js";
 import {
+  buildInventoryPdf,
   buildLabelsPdf,
   buildRecipesPdf,
   buildShoppingPdf,
   buildSortingPdf,
-} from "./pdf/documents.js";
-import { fitInputWidth } from "./ui/fit-input.js";
-import { initInventoryImport } from "./ui/inventory-import.js";
-import { initPlanner } from "./ui/planner.js";
-import { renderResults } from "./ui/results.js";
-import { initShare } from "./ui/share.js";
+} from "../pdf/documents.js";
+import { readSavedPlan, savePlan } from "../storage.js";
+import { fitInputWidth } from "../ui/fit-input.js";
+import { initInventoryImport } from "../ui/inventory-import.js";
+import { initPlanner } from "../ui/planner.js";
+import { renderResults } from "../ui/results.js";
+import { initShare } from "../ui/share.js";
 
-/** @typedef {import("./core/types.js").Recipe} Recipe */
-/** @typedef {import("./core/types.js").Ingredient} Ingredient */
-/** @typedef {import("./core/planner.js").PlanEntry} PlanEntry */
-
-/** Key in the local storage of this browser that holds the last plan query string. */
-const PLAN_STORAGE_KEY = "coxi-plan";
+/** @typedef {import("../core/types.js").Recipe} Recipe */
+/** @typedef {import("../core/types.js").Ingredient} Ingredient */
+/** @typedef {import("../core/planner.js").PlanEntry} PlanEntry */
 
 const calculateButton = /** @type {HTMLButtonElement} */ (document.querySelector("#calculate"));
 const eventNameInput = /** @type {HTMLInputElement} */ (document.querySelector("#event-name"));
@@ -45,9 +42,9 @@ main();
 /** Loads all data files, then starts the page. Shows an error notice if loading fails. */
 async function main() {
   try {
-    const { ingredients } = await loadJson("data/ingredients.json");
-    const { recipes: recipeIds } = await loadJson("data/recipes/index.json");
-    const recipes = await Promise.all(recipeIds.map((id) => loadJson(`data/recipes/${id}.json`)));
+    const { ingredients } = await loadJson("ingredients/ingredients.json");
+    const { recipes: recipeIds } = await loadJson("recipes/index.json");
+    const recipes = await Promise.all(recipeIds.map((id) => loadJson(`recipes/${id}.json`)));
     start(ingredients, recipes);
   } catch (error) {
     notices.loading = [`The data could not be loaded. ${/** @type {Error} */ (error).message}`];
@@ -93,24 +90,6 @@ function restoreSavedPlan() {
   const saved = readSavedPlan();
   if (saved) {
     history.replaceState(null, "", saved);
-  }
-}
-
-/** @returns {string | null} The saved query string, or null if there is none or storage is unavailable. */
-function readSavedPlan() {
-  try {
-    return localStorage.getItem(PLAN_STORAGE_KEY);
-  } catch {
-    return null;
-  }
-}
-
-/** @param {string} query */
-function savePlan(query) {
-  try {
-    localStorage.setItem(PLAN_STORAGE_KEY, query);
-  } catch {
-    // Storage is not available, for example in some private browsing modes. The plan still works.
   }
 }
 

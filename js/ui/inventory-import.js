@@ -2,7 +2,7 @@
 // Inventory section of the main page: shows the stored inventory, loads an inventory
 // file and removes the inventory. Editing happens on the inventory page.
 import { parseInventory } from "../core/inventory.js";
-import { clearStoredInventory, loadStoredInventory, saveStoredInventory } from "./inventory-storage.js";
+import { clearStoredInventory, loadStoredInventory, saveStoredInventory } from "../storage.js";
 
 /** @typedef {import("../core/types.js").Ingredient} Ingredient */
 /** @typedef {import("../core/types.js").Inventory} Inventory */

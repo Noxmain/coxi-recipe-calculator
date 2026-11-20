@@ -1,7 +1,6 @@
 // @ts-check
-// Validates the data files in data/ against the JSON Schemas in schemas/ and
-// checks the relations between them. Run locally with "npm run validate" and
-// in the GitHub Action.
+// Validates the data files against the JSON Schemas in schemas/ and checks the
+// relations between them. Run locally with "npm run validate" and in the GitHub Action.
 
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -21,11 +20,12 @@ function readJson(path) {
 
 /**
  * Checks all data files. Returns error messages, an empty list means valid.
- * @param {{ dataDir?: string, schemaDir?: string }} [options]
+ * @param {{ rootDir?: string, schemaDir?: string }} [options]
+ *   rootDir is the folder that contains ingredients/, inventory/ and recipes/.
  * @returns {string[]}
  */
 export function collectDataErrors({
-  dataDir = join(projectRoot, "data"),
+  rootDir = projectRoot,
   schemaDir = join(projectRoot, "schemas"),
 } = {}) {
   const ajv = new Ajv2020({ allErrors: true });
@@ -37,13 +37,13 @@ export function collectDataErrors({
   const errors = [];
 
   // Shape checks: each file against its schema.
-  const ingredientsFile = readJson(join(dataDir, "ingredients.json"));
-  errors.push(...schemaErrors("ingredients.json", validateIngredients, ingredientsFile));
+  const ingredientsFile = readJson(join(rootDir, "ingredients", "ingredients.json"));
+  errors.push(...schemaErrors("ingredients/ingredients.json", validateIngredients, ingredientsFile));
 
-  const inventoryFile = readJson(join(dataDir, "inventory.example.json"));
-  errors.push(...schemaErrors("inventory.example.json", validateInventory, inventoryFile));
+  const inventoryFile = readJson(join(rootDir, "inventory", "inventory.example.json"));
+  errors.push(...schemaErrors("inventory/inventory.example.json", validateInventory, inventoryFile));
 
-  const indexFile = readJson(join(dataDir, "recipes", "index.json"));
+  const indexFile = readJson(join(rootDir, "recipes", "index.json"));
   if (
     indexFile.schemaVersion !== 1 ||
     !Array.isArray(indexFile.recipes) ||
@@ -53,14 +53,14 @@ export function collectDataErrors({
   }
 
   // Every recipe file in the folder, not only the ones listed in index.json.
-  const recipeFileNames = readdirSync(join(dataDir, "recipes"))
+  const recipeFileNames = readdirSync(join(rootDir, "recipes"))
     .filter((name) => name.endsWith(".json") && name !== "index.json")
     .sort();
 
   /** @type {{ fileName: string, recipe: import("../js/core/types.js").Recipe }[]} */
   const recipeFiles = [];
   for (const fileName of recipeFileNames) {
-    const recipe = readJson(join(dataDir, "recipes", fileName));
+    const recipe = readJson(join(rootDir, "recipes", fileName));
     errors.push(...schemaErrors(`recipes/${fileName}`, validateRecipe, recipe));
     recipeFiles.push({ fileName, recipe });
   }

@@ -6,9 +6,12 @@ import { buildShoppingItems, summarizePrices } from "../js/core/shopping.js";
 import { indexById } from "../js/core/utils.js";
 import { validateDataset } from "../js/core/validation.js";
 
-/** @param {...string} parts */
+/**
+ * Reads a file from the project root, for example readJson("recipes", "index.json").
+ * @param {...string} parts
+ */
 function readJson(...parts) {
-  return JSON.parse(readFileSync(new URL(`../data/${parts.join("/")}`, import.meta.url), "utf8"));
+  return JSON.parse(readFileSync(new URL(`../${parts.join("/")}`, import.meta.url), "utf8"));
 }
 
 /**
@@ -26,7 +29,7 @@ test("the example data is consistent", () => {
     recipe: readJson("recipes", `${id}.json`),
   }));
   const errors = validateDataset({
-    ingredients: readJson("ingredients.json").ingredients,
+    ingredients: readJson("ingredients", "ingredients.json").ingredients,
     recipeFiles,
     recipeIndex,
   });
@@ -34,7 +37,7 @@ test("the example data is consistent", () => {
 });
 
 test("chili sin carne for 6 people matches the control example", () => {
-  const ingredientsById = indexById(readJson("ingredients.json").ingredients);
+  const ingredientsById = indexById(readJson("ingredients", "ingredients.json").ingredients);
   const chili = readJson("recipes", "chili-sin-carne.json");
 
   const needed = calculateNeededAmounts([{ recipe: chili, portions: 6 }]);

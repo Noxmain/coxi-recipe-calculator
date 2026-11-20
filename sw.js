@@ -4,10 +4,10 @@
 // This file is not type-checked, because the service worker global scope needs its own typings.
 
 /**
- * Bump this name when old cache entries should be removed on the next visit.
- * It is not needed for ordinary updates, because the network is always tried first.
+ * Bump this name when old cache entries should be removed on the next visit, for
+ * example after files have moved. Ordinary updates do not need it.
  */
-const CACHE_VERSION = "coxi-v1";
+const CACHE_VERSION = "coxi-v2";
 
 /**
  * Files of the app shell, relative to this file. Recipe files are added during install.
@@ -18,14 +18,20 @@ const SHELL_FILES = [
   "index.html",
   "inventory/",
   "inventory/index.html",
+  "recipes/",
+  "recipes/index.html",
+  "ingredients/",
+  "ingredients/index.html",
   "manifest.webmanifest",
   "css/style.css",
+  "css/app.css",
   "fonts/BricolageGrotesque-Variable.woff2",
   "icons/icon.svg",
   "icons/apple-touch-icon.png",
-  "js/app.js",
-  "js/inventory-page.js",
+  "js/pages/main.js",
+  "js/pages/inventory.js",
   "js/pwa.js",
+  "js/storage.js",
   "js/core/format.js",
   "js/core/inventory.js",
   "js/core/planner.js",
@@ -35,18 +41,17 @@ const SHELL_FILES = [
   "js/core/utils.js",
   "js/core/validation.js",
   "js/pdf/documents.js",
-  "js/pdf/inventory-pdf.js",
   "js/ui/fit-input.js",
   "js/ui/inventory-import.js",
-  "js/ui/inventory-storage.js",
   "js/ui/planner.js",
+  "js/ui/reset-data.js",
   "js/ui/results.js",
   "js/ui/share.js",
   "vendor/pdfmake/pdfmake.min.js",
   "vendor/pdfmake/vfs_fonts.js",
   "vendor/qrcode-generator/qrcode.js",
-  "data/ingredients.json",
-  "data/recipes/index.json",
+  "ingredients/ingredients.json",
+  "recipes/index.json",
 ];
 
 /**
@@ -58,16 +63,16 @@ function appUrl(path) {
 }
 
 /**
- * Stores the shell and every recipe file listed in data/recipes/index.json.
+ * Stores the shell and every recipe file listed in recipes/index.json.
  * If one file is missing, the installation fails and the old version stays active.
  * @param {Cache} cache
  */
 async function precache(cache) {
   await cache.addAll(SHELL_FILES.map(appUrl));
 
-  const response = await cache.match(appUrl("data/recipes/index.json"));
+  const response = await cache.match(appUrl("recipes/index.json"));
   const { recipes } = await response.json();
-  await cache.addAll(recipes.map((id) => appUrl(`data/recipes/${id}.json`)));
+  await cache.addAll(recipes.map((id) => appUrl(`recipes/${id}.json`)));
 }
 
 self.addEventListener("install", (event) => {

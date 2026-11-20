@@ -2,19 +2,14 @@
 // Inventory page. Edits the amounts of all ingredients. Every change is saved in the
 // local storage of this browser, so the main page uses it. The JSON file is used to
 // share an inventory.
-import { formatAmount } from "./core/format.js";
-import {
-  DEFAULT_INVENTORY_NAME,
-  buildInventoryFile,
-  parseInventory,
-} from "./core/inventory.js";
-import { compareNullableText, compareText, indexById } from "./core/utils.js";
-import { buildInventoryPdf } from "./pdf/inventory-pdf.js";
-import { fitInputWidth } from "./ui/fit-input.js";
-import { loadStoredInventory, saveStoredInventory } from "./ui/inventory-storage.js";
+import { DEFAULT_INVENTORY_NAME, buildInventoryFile, parseInventory } from "../core/inventory.js";
+import { compareNullableText, compareText, indexById } from "../core/utils.js";
+import { buildInventoryPdf } from "../pdf/documents.js";
+import { loadStoredInventory, saveStoredInventory } from "../storage.js";
+import { fitInputWidth } from "../ui/fit-input.js";
 
-/** @typedef {import("./core/types.js").Ingredient} Ingredient */
-/** @typedef {import("./core/types.js").Inventory} Inventory */
+/** @typedef {import("../core/types.js").Ingredient} Ingredient */
+/** @typedef {import("../core/types.js").Inventory} Inventory */
 
 const UNCATEGORIZED = "Uncategorized";
 
@@ -31,7 +26,7 @@ main();
 /** Loads the ingredients, then starts the page. */
 async function main() {
   try {
-    const { ingredients } = await loadJson("../data/ingredients.json");
+    const { ingredients } = await loadJson("../ingredients/ingredients.json");
     start(ingredients);
   } catch (error) {
     showNotices([`The data could not be loaded. ${/** @type {Error} */ (error).message}`]);

@@ -27,18 +27,18 @@ function assertInvalid(validate, data) {
 // ---- Valid example data -------------------------------------------------
 
 test("the example ingredients are valid", () => {
-  assertValid(validateIngredients, readJson("../data/ingredients.json"));
+  assertValid(validateIngredients, readJson("../ingredients/ingredients.json"));
 });
 
 test("the example recipes are valid", () => {
-  const { recipes } = readJson("../data/recipes/index.json");
+  const { recipes } = readJson("../recipes/index.json");
   for (const id of recipes) {
-    assertValid(validateRecipe, readJson(`../data/recipes/${id}.json`));
+    assertValid(validateRecipe, readJson(`../recipes/${id}.json`));
   }
 });
 
 test("the example inventory is valid", () => {
-  assertValid(validateInventory, readJson("../data/inventory.example.json"));
+  assertValid(validateInventory, readJson("../inventory/inventory.example.json"));
 });
 
 // ---- Valid edge cases ---------------------------------------------------
@@ -136,12 +136,13 @@ const invalidInventories = {
   "old format with unit per item": {
     schemaVersion: 1,
     kind: "inventory",
+    name: "Pantry",
     items: { "olive-oil": { amount: 500, unit: "ml" } },
   },
-  "negative amount": { schemaVersion: 1, kind: "inventory", items: { onion: -1 } },
-  "amount as text": { schemaVersion: 1, kind: "inventory", items: { onion: "3" } },
-  "wrong kind": { schemaVersion: 1, kind: "recipe", items: { onion: 3 } },
-  "id with uppercase letters": { schemaVersion: 1, kind: "inventory", items: { Onion: 3 } },
+  "negative amount": { schemaVersion: 1, kind: "inventory", name: "Pantry", items: { onion: -1 } },
+  "amount as text": { schemaVersion: 1, kind: "inventory", name: "Pantry", items: { onion: "3" } },
+  "wrong kind": { schemaVersion: 1, kind: "recipe", name: "Pantry", items: { onion: 3 } },
+  "id with uppercase letters": { schemaVersion: 1, kind: "inventory", name: "Pantry", items: { Onion: 3 } },
 };
 
 for (const [label, inventory] of Object.entries(invalidInventories)) {
