@@ -6,6 +6,7 @@
 import { readRecipeFile } from "../core/recipe-editing.js";
 import { getServings, mergeRecipes } from "../core/recipes.js";
 import { compareText, indexById } from "../core/utils.js";
+import { loadAppData } from "../data.js";
 import { buildRecipesPdf } from "../pdf/documents.js";
 import { deleteLocalRecipe, readLocalRecipes, saveLocalRecipe } from "../storage.js";
 import { createRecipeEditor } from "../ui/recipe-editor.js";
@@ -31,9 +32,7 @@ main();
 /** Loads the ingredients and the repository recipes, then starts the page. */
 async function main() {
   try {
-    const { ingredients } = await loadJson("../ingredients/ingredients.json");
-    const { recipes: recipeIds } = await loadJson("index.json");
-    const repoRecipes = await Promise.all(recipeIds.map((id) => loadJson(`${id}.json`)));
+    const { repoRecipes, ingredients } = await loadAppData("../");
     start(ingredients, repoRecipes);
   } catch (error) {
     showNotices([`The data could not be loaded. ${/** @type {Error} */ (error).message}`]);
@@ -41,19 +40,7 @@ async function main() {
 }
 
 /**
- * @param {string} path Relative to recipes/index.html.
- * @returns {Promise<any>}
- */
-async function loadJson(path) {
-  const response = await fetch(path);
-  if (!response.ok) {
-    throw new Error(`Could not load ${path} (HTTP ${response.status}).`);
-  }
-  return response.json();
-}
-
-/**
- * @param {Ingredient[]} ingredients
+ * @param {Ingredient[]} ingredients Merged with the saved ingredients.
  * @param {Recipe[]} repoRecipes
  */
 function start(ingredients, repoRecipes) {

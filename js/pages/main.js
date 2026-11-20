@@ -3,18 +3,20 @@
 // import, the Calculate button, the PDF downloads and the settings dialog.
 // Results are never recalculated in the background. A relevant change hides
 // them, and the user has to press Calculate again.
+// The plan is also kept in the local storage of this browser, so the home screen
+// app still has it when it starts without a query string.
 import { isWholeNumberAtLeastOne, resolvePlan } from "../core/planner.js";
-import { calculateNeededAmounts, mergeRecipes, sumAmountsByType } from "../core/recipes.js";
+import { calculateNeededAmounts, sumAmountsByType } from "../core/recipes.js";
 import { buildShoppingItems, groupByShop, summarizePrices } from "../core/shopping.js";
 import { indexById } from "../core/utils.js";
+import { loadAppData } from "../data.js";
 import {
-  buildInventoryPdf,
   buildLabelsPdf,
   buildRecipesPdf,
   buildShoppingPdf,
   buildSortingPdf,
 } from "../pdf/documents.js";
-import { readLocalRecipes, readSavedPlan, savePlan } from "../storage.js";
+import { readSavedPlan, savePlan } from "../storage.js";
 import { fitInputWidth } from "../ui/fit-input.js";
 import { initInventoryImport } from "../ui/inventory-import.js";
 import { initPlanner } from "../ui/planner.js";
@@ -24,9 +26,6 @@ import { initShare } from "../ui/share.js";
 /** @typedef {import("../core/types.js").Recipe} Recipe */
 /** @typedef {import("../core/types.js").Ingredient} Ingredient */
 /** @typedef {import("../core/planner.js").PlanEntry} PlanEntry */
-
-/** Key in the local storage of this browser that holds the last plan query string. */
-const PLAN_STORAGE_KEY = "coxi-plan";
 
 const calculateButton = /** @type {HTMLButtonElement} */ (document.querySelector("#calculate"));
 const eventNameInput = /** @type {HTMLInputElement} */ (document.querySelector("#event-name"));
@@ -43,32 +42,17 @@ const notices = { loading: [], plan: [], inventory: [], calculation: [] };
 main();
 
 /**
- * Loads all data files, then starts the page. Recipes saved in this browser replace
- * or extend the repository recipes. Shows an error notice if loading fails.
+ * Loads all data files, merged with the changes saved in this browser.
+ * Shows an error notice if loading fails.
  */
 async function main() {
   try {
-    const { ingredients } = await loadJson("ingredients/ingredients.json");
-    const { recipes: recipeIds } = await loadJson("recipes/index.json");
-    const repoRecipes = await Promise.all(recipeIds.map((id) => loadJson(`recipes/${id}.json`)));
-    const recipes = mergeRecipes(repoRecipes, readLocalRecipes());
+    const { ingredients, recipes } = await loadAppData("");
     start(ingredients, recipes);
   } catch (error) {
     notices.loading = [`The data could not be loaded. ${/** @type {Error} */ (error).message}`];
     renderNotices();
   }
-}
-
-/**
- * @param {string} path Relative to index.html.
- * @returns {Promise<any>}
- */
-async function loadJson(path) {
-  const response = await fetch(path);
-  if (!response.ok) {
-    throw new Error(`Could not load ${path} (HTTP ${response.status}).`);
-  }
-  return response.json();
 }
 
 /** Shows all notices in the order: loading, plan, inventory, calculation. */

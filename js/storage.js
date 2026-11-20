@@ -10,12 +10,61 @@ import { buildInventoryFile, parseInventory } from "./core/inventory.js";
 const PLAN_KEY = "coxi-plan";
 const INVENTORY_KEY = "coxi-inventory";
 const RECIPES_KEY = "coxi-recipes";
+const INGREDIENTS_KEY = "coxi-ingredients";
 
 /**
  * @typedef {Object} StoredInventory
  * @property {string} name
  * @property {Inventory} inventory
  */
+
+/**
+ * Reads a map of records (by id) from the local storage. Returns {} if nothing is stored or it is unreadable.
+ * @param {string} key
+ * @returns {Record<string, any>}
+ */
+function readRecords(key) {
+  try {
+    const data = JSON.parse(localStorage.getItem(key) ?? "{}");
+    return data !== null && typeof data === "object" && !Array.isArray(data) ? data : {};
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * @param {string} key
+ * @param {Record<string, unknown>} records
+ */
+function writeRecords(key, records) {
+  try {
+    localStorage.setItem(key, JSON.stringify(records));
+  } catch {
+    // Storage is not available, so the change is not kept.
+  }
+}
+
+/**
+ * Adds or replaces records by their id.
+ * @param {string} key
+ * @param {{ id: string }[]} items
+ */
+function upsertRecords(key, items) {
+  writeRecords(key, {
+    ...readRecords(key),
+    ...Object.fromEntries(items.map((item) => [item.id, item])),
+  });
+}
+
+/**
+ * @param {string} key
+ * @param {string} id
+ */
+function removeRecord(key, id) {
+  const records = readRecords(key);
+  delete records[id];
+  writeRecords(key, records);
+}
 
 /** @returns {string | null} The saved plan as query string, or null if there is none. */
 export function readSavedPlan() {
@@ -77,51 +126,68 @@ export function clearStoredInventory() {
   }
 }
 
-/**
- * @returns {Record<string, Recipe>} Recipes saved in this browser, by id. Empty if none or unreadable.
- */
+/** @returns {Record<string, Recipe>} Recipes saved in this browser, by id. */
 export function readLocalRecipes() {
-  try {
-    const data = JSON.parse(localStorage.getItem(RECIPES_KEY) ?? "{}");
-    return data !== null && typeof data === "object" && !Array.isArray(data) ? data : {};
-  } catch {
-    return {};
-  }
+  return readRecords(RECIPES_KEY);
 }
 
-/**
- * Saves a recipe in this browser. An existing saved recipe with the same id is replaced.
- * @param {Recipe} recipe
- */
+/** @param {Recipe} recipe */
 export function saveLocalRecipe(recipe) {
-  try {
-    localStorage.setItem(RECIPES_KEY, JSON.stringify({ ...readLocalRecipes(), [recipe.id]: recipe }));
-  } catch {
-    // Storage is not available, so the recipe cannot be kept.
-  }
+  upsertRecords(RECIPES_KEY, [recipe]);
 }
 
-/**
- * Removes the saved version of a recipe. A repository recipe with the same id is used again.
- * @param {string} id
- */
+/** @param {Recipe[]} recipes */
+export function saveLocalRecipes(recipes) {
+  upsertRecords(RECIPES_KEY, recipes);
+}
+
+/** @param {string} id The saved version is removed. A repository recipe with the same id is used again. */
 export function deleteLocalRecipe(id) {
-  try {
-    const recipes = readLocalRecipes();
-    delete recipes[id];
-    localStorage.setItem(RECIPES_KEY, JSON.stringify(recipes));
-  } catch {
-    // Storage is not available, so there is nothing to remove.
-  }
+  removeRecord(RECIPES_KEY, id);
 }
 
-/** Deletes all data this app keeps in this browser: plan, inventory and saved recipes. */
+/** @returns {Record<string, Ingredient>} Ingredients saved in this browser, by id. */
+export function readLocalIngredients() {
+  return readRecords(INGREDIENTS_KEY);
+}
+
+/** @param {Ingredient} ingredient */
+export function saveLocalIngredient(ingredient) {
+  upsertRecords(INGREDIENTS_KEY, [ingredient]);
+}
+
+/** @param {string} id The saved version is removed. A repository ingredient with the same id is used again. */
+export function deleteLocalIngredient(id) {
+  removeRecord(INGREDIENTS_KEY, id);
+}
+
+/** Deletes all data this app keeps in this browser: plan, inventory, saved recipes and saved ingredients. */
 export function clearAllLocalData() {
   clearStoredInventory();
   try {
     localStorage.removeItem(PLAN_KEY);
     localStorage.removeItem(RECIPES_KEY);
+    localStorage.removeItem(INGREDIENTS_KEY);
   } catch {
     // Storage is not available, so there is nothing to remove.
+  }
+}
+
+/**
+ * Multiplies the stored inventory amount of one ingredient. Used when its unit changes.
+ * @param {string} ingredientId
+ * @param {number} factor
+ */
+export function convertStoredInventoryAmount(ingredientId, factor) {
+  try {
+    const text = localStorage.getItem(INVENTORY_KEY);
+    if (text === null) return;
+    const file = JSON.parse(text);
+    if (file.items && Object.hasOwn(file.items, ingredientId)) {
+      file.items[ingredientId] = Number((file.items[ingredientId] * factor).toPrecision(12));
+      localStorage.setItem(INVENTORY_KEY, JSON.stringify(file));
+    }
+  } catch {
+    // Storage is not available or the stored data is unreadable. Nothing is converted.
   }
 }

@@ -2,16 +2,16 @@
 // Inventory page. Edits the amounts of all ingredients. Every change is saved in the
 // local storage of this browser, so the main page uses it. The JSON file is used to
 // share an inventory.
+import { groupByCategory } from "../core/ingredient-editing.js";
 import { DEFAULT_INVENTORY_NAME, buildInventoryFile, parseInventory } from "../core/inventory.js";
-import { compareNullableText, compareText, indexById } from "../core/utils.js";
+import { indexById } from "../core/utils.js";
+import { loadAppData } from "../data.js";
 import { buildInventoryPdf } from "../pdf/documents.js";
 import { loadStoredInventory, saveStoredInventory } from "../storage.js";
 import { fitInputWidth } from "../ui/fit-input.js";
 
 /** @typedef {import("../core/types.js").Ingredient} Ingredient */
 /** @typedef {import("../core/types.js").Inventory} Inventory */
-
-const UNCATEGORIZED = "Uncategorized";
 
 const nameInput = /** @type {HTMLInputElement} */ (document.querySelector("#inventory-name"));
 const searchInput = /** @type {HTMLInputElement} */ (document.querySelector("#inventory-search"));
@@ -23,26 +23,14 @@ const fileInput = /** @type {HTMLInputElement} */ (document.querySelector("#inve
 
 main();
 
-/** Loads the ingredients, then starts the page. */
+/** Loads the ingredients (merged with the saved ones), then starts the page. */
 async function main() {
   try {
-    const { ingredients } = await loadJson("../ingredients/ingredients.json");
+    const { ingredients } = await loadAppData("../");
     start(ingredients);
   } catch (error) {
     showNotices([`The data could not be loaded. ${/** @type {Error} */ (error).message}`]);
   }
-}
-
-/**
- * @param {string} path Relative to inventory/index.html.
- * @returns {Promise<any>}
- */
-async function loadJson(path) {
-  const response = await fetch(path);
-  if (!response.ok) {
-    throw new Error(`Could not load ${path} (HTTP ${response.status}).`);
-  }
-  return response.json();
 }
 
 /**
@@ -205,28 +193,6 @@ function start(ingredients) {
       .replace(/^-|-$/g, "");
     return slug ? `inventory-${slug}.${extension}` : `inventory.${extension}`;
   }
-}
-
-/**
- * Groups the ingredients by category. Categories are sorted alphabetically,
- * "Uncategorized" comes last. Ingredients are sorted by name.
- * @param {Ingredient[]} ingredients
- * @returns {{ title: string, ingredients: Ingredient[] }[]}
- */
-function groupByCategory(ingredients) {
-  /** @type {Map<string | null, Ingredient[]>} */
-  const byCategory = new Map();
-  for (const ingredient of ingredients) {
-    const key = ingredient.category ?? null;
-    byCategory.set(key, [...(byCategory.get(key) ?? []), ingredient]);
-  }
-
-  return [...byCategory]
-    .sort(([a], [b]) => compareNullableText(a, b))
-    .map(([category, list]) => ({
-      title: category ?? UNCATEGORIZED,
-      ingredients: list.sort((a, b) => compareText(a.name, b.name)),
-    }));
 }
 
 /**
