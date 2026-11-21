@@ -9,6 +9,7 @@ import { compareText, indexById } from "../core/utils.js";
 import { loadAppData } from "../data.js";
 import { buildRecipesPdf } from "../pdf/documents.js";
 import { deleteLocalRecipe, readLocalRecipes, saveLocalRecipe } from "../storage.js";
+import { createIcon } from "../ui/icon.js";
 import { createRecipeEditor } from "../ui/recipe-editor.js";
 
 /** @typedef {import("../core/types.js").Recipe} Recipe */
@@ -16,8 +17,6 @@ import { createRecipeEditor } from "../ui/recipe-editor.js";
 
 const TYPE_ORDER = /** @type {const} */ (["main", "spread", "other"]);
 const TYPE_TITLES = { main: "Mains", spread: "Spreads", other: "Others" };
-const DOWNLOAD_ICON =
-  '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>';
 
 const listView = /** @type {HTMLElement} */ (document.querySelector("#list-view"));
 const editorView = /** @type {HTMLElement} */ (document.querySelector("#editor-view"));
@@ -189,8 +188,7 @@ function downloadButton(text) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "button-link";
-  button.innerHTML = DOWNLOAD_ICON;
-  button.append(text);
+  button.append(createIcon("download"), text);
   return button;
 }
 

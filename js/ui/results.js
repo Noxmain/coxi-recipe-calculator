@@ -2,14 +2,9 @@
 // Renders the PDF download buttons and the price estimate on the main page.
 // The shopping list itself is only available as PDF.
 import { formatMoney, formatPercent } from "../core/format.js";
+import { createIcon } from "./icon.js";
 
 /** @typedef {import("../core/types.js").PriceSummary} PriceSummary */
-
-/** Download icon in front of each PDF button. Static markup, contains no user data. */
-const DOWNLOAD_ICON =
-  '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
-  '<path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14" fill="none" stroke="currentColor" ' +
-  'stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 /**
  * @typedef {Object} ResultsView
@@ -51,8 +46,7 @@ function downloadButton(text, onClick) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "download-button";
-  button.innerHTML = DOWNLOAD_ICON;
-  button.append(text);
+  button.append(createIcon("download"), text);
   button.addEventListener("click", onClick);
   return button;
 }

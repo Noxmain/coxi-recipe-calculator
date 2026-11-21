@@ -22,7 +22,7 @@ css/style.css                     General look of the site (colors, font, base e
 css/app.css                       Layout and adjustments for the pages of this app
 docs/                             The documentation of the project
 fonts/                            Bricolage Grotesque, shipped for offline use
-icons/                            App icon (SVG) and iOS icon (PNG)
+icons/                            App icon (SVG), iOS icon (PNG) and the icon sprite used by all pages
 ingredients/                      Ingredient data (ingredients.json) and the ingredients page
 inventory/                        Example inventory and the inventory page
 js/core/                          Calculation and rules, no DOM access

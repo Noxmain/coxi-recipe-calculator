@@ -18,8 +18,9 @@ The Coxi Recipe Calculator is a static web app. It is served as plain files, for
 |---|---|
 | `index.html` | Main page: plan, inventory import, calculation, downloads, settings dialog. |
 | `inventory/index.html` | Inventory page. |
-| `recipes/index.html` | Recipe page: list, editor, import. |
-| `ingredients/index.html` | Ingredient page: list, editor, import and export. |
+| `recipes/index.html` | Recipe page. |
+| `ingredients/index.html` | Ingredient page. |
+| `icons/sprite.svg` | Icon sprite. Every icon of the app is a `<symbol>` here, referenced with `<use>`. |
 | `ingredients/ingredients.json` | All repository ingredients (`schemas/ingredients.schema.json`). |
 | `recipes/index.json` | List of all repository recipe ids. Generated, see section 9. |
 | `recipes/<id>.json` | One repository recipe per file (`schemas/recipe.schema.json`). File name equals `id`. |

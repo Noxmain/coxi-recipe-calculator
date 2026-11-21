@@ -198,8 +198,9 @@ These are not decided or not implemented. Ask the maintainer before you build an
 6. Changed data files: run `npm run build-index` if recipes changed, then `npm test` and `npm run validate`.
 7. Changed styles: general look in `style.css`, screen-specific rules in `app.css`.
 8. No new runtime dependencies, no build step, no external network requests.
-9. Do not store personal calculation data in the repository.
-10. Update the documentation files only as the maintainer asks. The three user and developer documents describe the current state. This file may also describe open points and history.
+9. Icons: add new icons as a `<symbol>` to `icons/sprite.svg`, with the stroke attributes of the other symbols. HTML pages reference them with `<svg class="icon"><use href="icons/sprite.svg#name"/></svg>` (`../icons/...` on subpages). In JavaScript, use `createIcon(name)` from `js/ui/icon.js`. Do not inline SVG paths, and do not use icon characters such as + or × in button text.
+10. Do not store personal calculation data in the repository.
+11. Update the documentation files only as the maintainer asks. The three user and developer documents describe the current state. This file may also describe open points and history.
 
 ## 12. Commands
 
@@ -228,6 +229,7 @@ docs/USER_GUIDE.md
 fonts/BricolageGrotesque-Variable.woff2
 icons/apple-touch-icon.png
 icons/icon.svg
+icons/sprite.svg
 index.html
 ingredients/index.html
 ingredients/ingredients.json
@@ -252,6 +254,7 @@ js/pdf/documents.js
 js/pwa.js
 js/storage.js
 js/ui/fit-input.js
+js/ui/icon.js
 js/ui/ingredient-editor.js
 js/ui/inventory-import.js
 js/ui/planner.js

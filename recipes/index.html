@@ -24,16 +24,16 @@
 
       <div class="inventory-actions">
         <a class="button-link" href="../">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m0 0 6-6m-6 6 6 6"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../icons/sprite.svg#back"/></svg>
           Back to plan
         </a>
-        <button id="new-recipe" type="button" class="button-link">+ New recipe</button>
+        <button id="new-recipe" type="button" class="button-link"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../icons/sprite.svg#plus"/></svg> New recipe</button>
         <label class="button-link">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4m0 0-4 4m4-4 4 4M5 20h14"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../icons/sprite.svg#upload"/></svg>
           Import recipe file
           <input id="recipe-file" class="visually-hidden" type="file" accept=".json,application/json">
         </label>
-        <a id="help-link" class="button-link" href="https://github.com/Noxmain/coxi-recipe-calculator/blob/main/docs/USER_GUIDE.md#changing-and-uploading-recipes">? Help</a>
+        <a id="help-link" class="button-link" href="https://github.com/Noxmain/coxi-recipe-calculator/blob/main/docs/USER_GUIDE.md#changing-and-uploading-recipes"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../icons/sprite.svg#help"/></svg> Help</a>
       </div>
 
       <input id="recipe-search" class="row-recipe inventory-search" type="search" placeholder="Search recipe…" aria-label="Search recipe" autocomplete="off">
@@ -53,7 +53,7 @@
 
       <div class="inventory-actions">
         <button id="editor-back" type="button" class="button-link">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m0 0 6-6m-6 6 6 6"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../icons/sprite.svg#back"/></svg>
           Back to recipes
         </button>
       </div>
@@ -84,13 +84,13 @@
           <button id="scale-button" type="button" class="button-link heading-action" hidden>Scale ingredients</button>
         </h3>
         <ul id="editor-ingredients" class="rows"></ul>
-        <button id="add-ingredient" type="button" class="add-row">+ Add ingredient</button>
+        <button id="add-ingredient" type="button" class="add-row"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../icons/sprite.svg#plus"/></svg> Add ingredient</button>
       </section>
 
       <section class="planner-section">
         <h3>Working steps</h3>
         <ol id="editor-steps" class="step-list"></ol>
-        <button id="add-step" type="button" class="add-row">+ Add step</button>
+        <button id="add-step" type="button" class="add-row"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../icons/sprite.svg#plus"/></svg> Add step</button>
       </section>
 
       <ul id="editor-errors" class="notices"></ul>
@@ -99,11 +99,11 @@
 
       <div class="downloads">
         <button id="download-recipe" type="button" class="download-button">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../icons/sprite.svg#download"/></svg>
           Download recipe file
         </button>
         <button id="discard-recipe" type="button" class="button-link" hidden>
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../icons/sprite.svg#trash"/></svg>
           <span id="discard-label"></span>
         </button>
       </div>

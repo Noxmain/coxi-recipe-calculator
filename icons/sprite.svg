@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon sprite of the Coxi Recipe Calculator. Used as <use href="icons/sprite.svg#name">.
+       Each symbol carries the stroke style of the app, because the attributes of this root
+       element are not inherited by the symbols when they are referenced. -->
+
+  <!-- Settings (gear) -->
+  <symbol id="settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10.54 5.67 10.75 3.09H13.25L13.46 5.67A6.5 6.5 0 0 1 15.44 6.49L17.42 4.81 19.19 6.58 17.51 8.56A6.5 6.5 0 0 1 18.33 10.54L20.91 10.75V13.25L18.33 13.46A6.5 6.5 0 0 1 17.51 15.44L19.19 17.42 17.42 19.19 15.44 17.51A6.5 6.5 0 0 1 13.46 18.33L13.25 20.91H10.75L10.54 18.33A6.5 6.5 0 0 1 8.56 17.51L6.58 19.19 4.81 17.42 6.49 15.44A6.5 6.5 0 0 1 5.67 13.46L3.09 13.25V10.75L5.67 10.54A6.5 6.5 0 0 1 6.49 8.56L4.81 6.58 6.58 4.81 8.56 6.49A6.5 6.5 0 0 1 10.54 5.67Z"/>
+    <circle cx="12" cy="12" r="3"/>
+  </symbol>
+
+  <!-- Cooking pot -->
+  <symbol id="cooking-pot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 6V4"/>
+    <path d="M5 10a7 4 0 0 1 14 0"/>
+    <path d="M5 10h14v7a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3z"/>
+    <path d="M5 13H3M19 13h2"/>
+  </symbol>
+
+  <!-- Jar of spread -->
+  <symbol id="jar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="7" y="3" width="10" height="3" rx="1"/>
+    <path d="M8 6v1.5C6.2 8.3 5 9.7 5 11.5V18a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-6.5c0-1.8-1.2-3.2-3-4V6"/>
+    <rect x="8.5" y="12.5" width="7" height="4.5" rx="1"/>
+  </symbol>
+
+  <!-- Cake -->
+  <symbol id="cake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2.5c.9 1 1.3 1.7 1.3 2.3a1.3 1.3 0 0 1-2.6 0c0-.6.4-1.3 1.3-2.3z"/>
+    <path d="M12 12V9"/>
+    <path d="M5 20v-6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v6"/>
+    <path d="M5 15.5q1.75 2 3.5 0t3.5 0t3.5 0t3.5 0"/>
+    <path d="M3 20h18"/>
+  </symbol>
+
+  <!-- Upload (arrow up into a tray) -->
+  <symbol id="upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 15V3M7 8l5-5 5 5"/>
+    <path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/>
+  </symbol>
+
+  <!-- Download (arrow down into a tray) -->
+  <symbol id="download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3v12M7 10l5 5 5-5"/>
+    <path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/>
+  </symbol>
+
+  <!-- Trash can -->
+  <symbol id="trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 6h18"/>
+    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+    <path d="M6 6v13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6"/>
+    <path d="M10 11v6M14 11v6"/>
+  </symbol>
+
+  <!-- Copy -->
+  <symbol id="copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="8" y="8" width="13" height="13" rx="2"/>
+    <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>
+  </symbol>
+
+  <!-- Paste (clipboard) -->
+  <symbol id="paste" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="8" y="2" width="8" height="4" rx="1"/>
+    <path d="M8 4H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1"/>
+  </symbol>
+
+  <!-- Share (connected nodes) -->
+  <symbol id="share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="18" cy="5" r="3"/>
+    <circle cx="6" cy="12" r="3"/>
+    <circle cx="18" cy="19" r="3"/>
+    <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/>
+  </symbol>
+
+  <!-- Inventory (storage box) -->
+  <symbol id="inventory" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="18" height="5" rx="1"/>
+    <path d="M5 8v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"/>
+    <path d="M10 12h4"/>
+  </symbol>
+
+  <!-- Recipe book -->
+  <symbol id="recipe-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 18.5v-13A2.5 2.5 0 0 1 6.5 3H20v18H6.5a2.5 2.5 0 0 1 0-5H20"/>
+    <path d="M9 8h6M9 12h4"/>
+  </symbol>
+
+  <!-- Ingredients (leaf) -->
+  <symbol id="ingredients" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 18C6 9 11 4 20 4c0 9-5 14-14 14z"/>
+    <path d="M3 21 13 11"/>
+  </symbol>
+
+  <!-- Back (arrow to the left) -->
+  <symbol id="back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19 12H5M10 7l-5 5 5 5"/>
+  </symbol>
+
+  <!-- Plus -->
+  <symbol id="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 5v14M5 12h14"/>
+  </symbol>
+
+  <!-- Help (question mark in a circle) -->
+  <symbol id="help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+    <path d="M12 17h.01"/>
+  </symbol>
+
+  <!-- Close (cross) -->
+  <symbol id="close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 6l12 12M18 6L6 18"/>
+  </symbol>
+</svg>

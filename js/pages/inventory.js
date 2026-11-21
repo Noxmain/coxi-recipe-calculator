@@ -14,6 +14,7 @@ import { loadAppData } from "../data.js";
 import { buildInventoryPdf } from "../pdf/documents.js";
 import { loadStoredInventory, saveLocalIngredient, saveStoredInventory } from "../storage.js";
 import { fitInputWidth } from "../ui/fit-input.js";
+import { createIcon } from "../ui/icon.js";
 
 /** @typedef {import("../core/types.js").Ingredient} Ingredient */
 /** @typedef {import("../core/types.js").Inventory} Inventory */
@@ -161,7 +162,7 @@ function start(allIngredients) {
     const addButton = document.createElement("button");
     addButton.type = "button";
     addButton.className = "button-link";
-    addButton.textContent = "+ New ingredient";
+    addButton.append(createIcon("plus"), " New ingredient");
     addButton.addEventListener("click", addDraft);
     bar.append(addButton);
 

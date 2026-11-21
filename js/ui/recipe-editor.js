@@ -9,6 +9,7 @@ import {
   validateRecipeDraft,
 } from "../core/recipe-editing.js";
 import { compareText } from "../core/utils.js";
+import { createIcon } from "./icon.js";
 
 /** @typedef {import("../core/types.js").Ingredient} Ingredient */
 /** @typedef {import("../core/types.js").Recipe} Recipe */
@@ -180,7 +181,8 @@ export function createRecipeEditor({ ingredients, onSave, onDiscard, onBack }) {
     amountLabel.append(amount);
 
     const unit = el("span", "ingredient-unit muted");
-    const remove = el("button", "row-delete", "×");
+    const remove = el("button", "row-delete");
+    remove.append(createIcon("close"));
     remove.type = "button";
     remove.setAttribute("aria-label", "Remove ingredient");
 
@@ -251,7 +253,8 @@ export function createRecipeEditor({ ingredients, onSave, onDiscard, onBack }) {
     area.rows = 2;
     area.value = text;
     area.setAttribute("aria-label", "Working step");
-    const remove = el("button", "row-delete", "×");
+    const remove = el("button", "row-delete");
+    remove.append(createIcon("close"));
     remove.type = "button";
     remove.setAttribute("aria-label", "Remove step");
     remove.addEventListener("click", () => item.remove());
