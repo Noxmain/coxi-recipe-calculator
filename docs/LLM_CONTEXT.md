@@ -70,6 +70,8 @@ The maintainer is not a professional developer. The maintainer wants clean, read
 - Stored in `coxi-inventory` and saved on every change. Export and import as JSON (name in file name), PDF export.
 - Main page can load an inventory file and remove it. Inventory editing happens only on the inventory page.
 - Inventory files from other people carry no unit information. Their amounts are taken as they are.
+- New ingredients can be created on the inventory page, in the section Uncategorized (button "+ New ingredient"). Rows are drafts until "Save new ingredients" is pressed. Name and unit are required, amount is optional, a name that already exists (ignoring case) is refused with a warning. The ingredient gets an id from the name (`createIngredientId`) and no category, package or shop. It is stored locally only, like every other local ingredient.
+- The inventory itself is still saved on every change. "Save new ingredients" only creates the ingredients.
 
 ### 5.3 Recipes page
 
@@ -143,6 +145,7 @@ Also note: an ingredient's history is only meaningful if it is kept in the repos
 - **Print labels per planned row**, so two pots of the same recipe get two labels.
 - **Thousands separator is a space**, decimals a dot.
 - **English everywhere** in the app, but the maintainer works in German. Keep answers in German when talking to the maintainer, and English in the repository.
+- **Creating ingredients on the inventory page needs an explicit button:** the inventory is saved on every change, but a new ingredient should not be created while the name is still being typed.
 
 ## 8. Rejected or dropped ideas
 
@@ -208,3 +211,85 @@ npm run build-index # rewrite recipes/index.json from the recipe files
 ```
 
 Local preview: `python3 -m http.server 8000` in the project root, then open `http://localhost:8000`.
+
+## 13. Complete repository file list
+
+```
+.github/workflows/validate.yaml
+.gitignore
+.nojekyll
+README.md
+css/app.css
+css/style.css
+docs/LLM_CONTEXT.md
+docs/PROJECT_SPECIFICATION.md
+docs/TECH_DOCS.md
+docs/USER_GUIDE.md
+fonts/BricolageGrotesque-Variable.woff2
+icons/apple-touch-icon.png
+icons/icon.svg
+index.html
+ingredients/index.html
+ingredients/ingredients.json
+inventory/index.html
+inventory/inventory.example.json
+js/core/format.js
+js/core/ingredient-editing.js
+js/core/inventory.js
+js/core/planner.js
+js/core/recipe-editing.js
+js/core/recipes.js
+js/core/shopping.js
+js/core/types.js
+js/core/utils.js
+js/core/validation.js
+js/data.js
+js/pages/ingredients.js
+js/pages/inventory.js
+js/pages/main.js
+js/pages/recipes.js
+js/pdf/documents.js
+js/pwa.js
+js/storage.js
+js/ui/fit-input.js
+js/ui/ingredient-editor.js
+js/ui/inventory-import.js
+js/ui/planner.js
+js/ui/recipe-editor.js
+js/ui/reset-data.js
+js/ui/results.js
+js/ui/share.js
+manifest.webmanifest
+package-lock.json
+package.json
+recipes/chili-sin-carne.json
+recipes/index.html
+recipes/index.json
+recipes/pancakes.json
+recipes/red-pesto.json
+schemas/ingredients.schema.json
+schemas/inventory.schema.json
+schemas/recipe.schema.json
+scripts/build-index.js
+scripts/validate-data.js
+sw.js
+test/build-index.test.js
+test/example-data.test.js
+test/ingredient-editing.test.js
+test/inventory-schema.test.js
+test/inventory.test.js
+test/pdf-documents.test.js
+test/planner.test.js
+test/recipe-editing.test.js
+test/recipe-scaling.test.js
+test/recipes.test.js
+test/schema.test.js
+test/shopping.test.js
+test/validate-script.test.js
+test/validation.test.js
+vendor/pdfmake/LICENSE
+vendor/pdfmake/pdfmake.min.js
+vendor/pdfmake/vfs_fonts.js
+vendor/qrcode-generator/README.md
+vendor/qrcode-generator/qrcode.js
+```

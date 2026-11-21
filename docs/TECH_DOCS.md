@@ -133,7 +133,7 @@ Merging rule for recipes and ingredients (`mergeRecipes`, `mergeIngredients`): r
   - `groupByShop(items)`
 - **`inventory.js`:** `parseInventory`, `buildInventoryFile`, `DEFAULT_INVENTORY_NAME`.
 - **`recipe-editing.js`:** `slugify`, `createUniqueId`, `validateRecipeDraft`, `buildRecipeFile`, `readRecipeFile`, `scaleFactorForChange`.
-- **`ingredient-editing.js`:** `validateIngredientDraft`, `buildIngredientRecord`, `readIngredientFile`, `buildIngredientsFile`, `mergeIngredients`, `isSameIngredient`, `usingRecipes`, `convertRecipeAmounts`, `groupByCategory`, `roundAmount`.
+- **`ingredient-editing.js`:** `validateIngredientDraft`, `buildIngredientRecord`, `createIngredientId`, `hasIngredientName`, `createNewIngredient`, `createIngredientsFromDrafts`, `readIngredientFile`, `buildIngredientsFile`, `mergeIngredients`, `isSameIngredient`, `usingRecipes`, `convertRecipeAmounts`, `groupByCategory` (category `Uncategorized` always last), `roundAmount`, `UNCATEGORIZED_TITLE`.
 - **`format.js`:** number, money, percent and date formatting. Thousands are separated by a space, decimals by a dot. Rounding happens only here, never in the calculation.
 - **`validation.js`:** `validateDataset`, the relation checks between data files.
 
@@ -142,7 +142,7 @@ Merging rule for recipes and ingredients (`mergeRecipes`, `mergeIngredients`): r
 Each page is one module that is loaded with `<script type="module">` from its HTML file.
 
 - **`main.js`:** loads the data with `loadAppData`, connects the planner, the inventory import, the share dialog, the calculation and the PDF downloads. Keeps the calculation snapshot that decides when results are hidden.
-- **`inventory.js`:** edits the stored inventory, search, JSON and PDF export, file import.
+- **`inventory.js`:** edits the stored inventory, search, JSON and PDF export, file import. Shows the group Uncategorized always, with its new-ingredient rows, their warnings and the buttons "+ New ingredient", "Save new ingredients" and "Discard new ingredients" below the existing ingredients. Creates a `datalist` with the unit suggestions in the page itself.
 - **`recipes.js`:** list, search, JSON and PDF per recipe, new recipe, import, editor integration.
 - **`ingredients.js`:** list, search, editor integration, export, import with unit conversion dialog, discard and delete rules.
 
@@ -184,6 +184,9 @@ The plan is written to the address bar and to `coxi-plan` on every change.
 
 - The main page loads the stored inventory (`coxi-inventory`) at start, and can load or remove a file.
 - The inventory page saves every change at once through `saveStoredInventory`. An empty amount removes the entry.
+- New ingredients are drafts on the page until "Save new ingredients" is pressed. `createIngredientsFromDrafts` decides which drafts become ingredients and returns warnings for the others. Each created ingredient is stored with `saveLocalIngredient` in `coxi-ingredients`, its amount (if any) is stored in the inventory as usual.
+- Ids come from `createIngredientId`: the name in ASCII lowercase with dashes, with `-2`, `-3` ... if the id is taken.
+- A name that already exists (ignoring case) is never created twice.
 
 ### 6.3 Recipe editing
 

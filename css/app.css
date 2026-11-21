@@ -397,6 +397,11 @@
   padding-left: 0.25rem;
 }
 
+/* Row for a new ingredient on the inventory page: name, amount, unit. */
+.row.inventory-draft-row {
+  grid-template-columns: minmax(0, 1fr) 6rem 5rem;
+}
+
 /* ---------- Small screens ---------- */
 @media (max-width: 36rem) {
   .app-logo {
@@ -411,6 +416,10 @@
 
   .row {
     grid-template-columns: 1fr 2.5rem;
+  }
+
+  .row.inventory-draft-row {
+    grid-template-columns: minmax(0, 1fr) 4.5rem 4rem;
   }
 
   .row-recipe-field {

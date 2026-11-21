@@ -3,7 +3,10 @@ import assert from "node:assert/strict";
 import {
   buildIngredientRecord,
   convertRecipeAmounts,
+  createIngredientId,
+  createIngredientsFromDrafts,
   groupByCategory,
+  hasIngredientName,
   isSameIngredient,
   mergeIngredients,
   readIngredientFile,
@@ -52,6 +55,69 @@ test("empty optional fields are left out of the record", () => {
     whereToBuy: "",
   });
   assert.deepEqual(record, { id: "water", name: "Water", unit: "ml" });
+});
+
+test("ids are made from the name and numbered when taken", () => {
+  assert.equal(createIngredientId("Red Onion", new Set()), "red-onion");
+  assert.equal(createIngredientId("Äpfel", new Set()), "apfel");
+  assert.equal(createIngredientId("Salt", new Set(["salt"])), "salt-2");
+  assert.equal(createIngredientId("Salt", new Set(["salt", "salt-2"])), "salt-3");
+  assert.equal(createIngredientId("  !!  ", new Set()), "ingredient");
+});
+
+test("an existing name is found regardless of case and spaces", () => {
+  assert.equal(hasIngredientName([garlic], "  garlic "), true);
+  assert.equal(hasIngredientName([garlic], "Onion"), false);
+});
+
+test("complete new rows become ingredients, empty rows are dropped silently", () => {
+  const result = createIngredientsFromDrafts(
+    [
+      { name: "Fresh basil", unit: "g", amount: "20" },
+      { name: "", unit: "", amount: "" },
+      { name: "Sea salt", unit: "g", amount: "" },
+    ],
+    [garlic],
+  );
+  assert.deepEqual(result.warnings, []);
+  assert.deepEqual(result.remaining, []);
+  assert.deepEqual(
+    result.created.map((item) => ({ id: item.ingredient.id, unit: item.ingredient.unit, amount: item.amount })),
+    [
+      { id: "fresh-basil", unit: "g", amount: 20 },
+      { id: "sea-salt", unit: "g", amount: null },
+    ],
+  );
+  assert.equal(result.created[0].ingredient.category, undefined);
+});
+
+test("a row without name or unit stays with a warning", () => {
+  const draft = { name: "Basil", unit: "", amount: "5" };
+  const result = createIngredientsFromDrafts([draft], [garlic]);
+  assert.equal(result.created.length, 0);
+  assert.deepEqual(result.remaining, [draft]);
+  assert.equal(result.warnings.length, 1);
+});
+
+test("an existing name is refused, also when it appears twice in one batch", () => {
+  const result = createIngredientsFromDrafts(
+    [
+      { name: "garlic", unit: "clove", amount: "" },
+      { name: "Basil", unit: "g", amount: "" },
+      { name: "basil", unit: "g", amount: "" },
+    ],
+    [garlic],
+  );
+  assert.deepEqual(result.created.map((item) => item.ingredient.name), ["Basil"]);
+  assert.equal(result.remaining.length, 2);
+  assert.equal(result.warnings.length, 2);
+});
+
+test("an invalid amount keeps the row with a warning", () => {
+  const result = createIngredientsFromDrafts([{ name: "Basil", unit: "g", amount: "-3" }], []);
+  assert.equal(result.created.length, 0);
+  assert.equal(result.remaining.length, 1);
+  assert.match(result.warnings[0], /not a valid number/);
 });
 
 test("converting a recipe multiplies only the amounts of that ingredient", () => {
@@ -133,17 +199,18 @@ test("two ingredients with the same content are the same", () => {
   assert.equal(isSameIngredient(garlic, { ...garlic, packagePrice: 0.5 }), false);
 });
 
-test("ingredients are grouped by category, without category last", () => {
+test("ingredients are grouped by category, without category always last", () => {
   const groups = groupByCategory(
     /** @type {any} */ ([
       { id: "water", name: "Water", unit: "ml" },
       { id: "lemon", name: "Lemon", unit: "piece", category: "Fruit" },
+      { id: "zest", name: "Zest", unit: "g", category: "Zucchini" },
       garlic,
     ]),
   );
   assert.deepEqual(
     groups.map((group) => group.title),
-    ["Fruit", "Vegetables", "Uncategorized"],
+    ["Fruit", "Vegetables", "Zucchini", "Uncategorized"],
   );
 });
 

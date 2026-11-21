@@ -100,6 +100,16 @@ Open it with **Edit inventory**.
 
 The amounts are always in the unit of the ingredient (for example grams, pieces or cans). Packages are not counted as units.
 
+### Adding ingredients
+
+**+ New ingredient** (at the end of the page) adds a row for an ingredient that does not exist yet. Enter its name, the amount you have and its unit. The unit field suggests the units that are already in use. Then press **Save new ingredients**. The app creates the ingredient in this browser with its own id. It has no category, package size, package price or shop; add these later on the ingredients page.
+
+- **Discard new ingredients** removes all rows that are not saved yet.
+- Rows without a name or without a unit stay on the page, and a message appears below them. Completely empty rows are ignored.
+- A name that already exists is not created again. Use another name, or enter the amount in the existing ingredient.
+- New ingredients are marked "Saved in this browser only" on the ingredients page.
+- Rows that are not saved yet are lost when you leave the page.
+
 ## The recipes page
 
 Open it with **Edit recipes** in the settings menu.
@@ -182,6 +192,8 @@ Ingredients that you want other people to use must be added to the repository. O
 7. Merge the pull request. When GitHub Pages has updated the site, the ingredient is part of the app for everyone.
 
 **Important:** The export contains the whole list. If someone else changed the repository in the meantime, a copy of an older export can overwrite their changes. Export again from the current version of the app, or merge the changes by hand, before you open the pull request.
+
+**Ingredients created on the inventory page** exist only in your browser. If you share an inventory file that uses them, the other device must have the same ingredient, otherwise the entry is skipped with a message. Export the ingredients file together with the inventory file, or add the ingredient to the repository by pull request.
 
 **If you are not the owner:** Fork the repository and send the pull request from your fork. The check cannot write to forks. Make sure your ingredient ids are unique and that every unit is written the same way as in the existing list.
 

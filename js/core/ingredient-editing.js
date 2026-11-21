@@ -1,9 +1,8 @@
 // @ts-check
-// Rules for ingredients: checking, building the stored record, unit conversion of
-// recipes, merging with the ingredients saved in this browser, and grouping.
-// Pure functions, no DOM.
-import { compareNullableText, compareText, isPlainObject } from "./utils.js";
-import { createUniqueId } from "./recipe-editing.js";
+// Rules for ingredients: checking, building the stored record, creating ingredients from
+// the inventory page, unit conversion of recipes, merging with the ingredients saved in
+// this browser, and grouping. Pure functions, no DOM.
+import { compareText, isPlainObject } from "./utils.js";
 
 /** @typedef {import("./types.js").Ingredient} Ingredient */
 /** @typedef {import("./types.js").Recipe} Recipe */
@@ -20,8 +19,18 @@ import { createUniqueId } from "./recipe-editing.js";
  * @property {string} whereToBuy
  */
 
+/**
+ * A row of the "new ingredient" form on the inventory page, as typed by the user.
+ * @typedef {Object} NewIngredientDraft
+ * @property {string} name
+ * @property {string} unit
+ * @property {string} amount Text of the amount field. Empty means no amount.
+ */
+
+/** Title of the group for ingredients without category. It is always shown last. */
+export const UNCATEGORIZED_TITLE = "Uncategorized";
+
 const ID_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
-const UNCATEGORIZED = "Uncategorized";
 const COMPARED_FIELDS = ["name", "unit", "category", "packageSize", "packagePrice", "whereToBuy"];
 
 /**
@@ -88,6 +97,119 @@ export function buildIngredientRecord(draft) {
     record.whereToBuy = draft.whereToBuy.trim();
   }
   return /** @type {Ingredient} */ (record);
+}
+
+/**
+ * Creates an id from a name: ASCII letters in lowercase, words joined by dashes.
+ * If the id is taken, -2, -3, ... is added.
+ * @param {string} name
+ * @param {Set<string>} takenIds
+ * @returns {string}
+ */
+export function createIngredientId(name, takenIds) {
+  const base =
+    name
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || "ingredient";
+
+  let id = base;
+  for (let counter = 2; takenIds.has(id); counter += 1) {
+    id = `${base}-${counter}`;
+  }
+  return id;
+}
+
+/**
+ * True if an ingredient with this name exists. The comparison ignores case and surrounding spaces.
+ * @param {Ingredient[]} ingredients
+ * @param {string} name
+ * @returns {boolean}
+ */
+export function hasIngredientName(ingredients, name) {
+  const wanted = name.trim().toLowerCase();
+  return ingredients.some((ingredient) => ingredient.name.trim().toLowerCase() === wanted);
+}
+
+/**
+ * A new ingredient with only id, name and unit. No category, package or shop.
+ * @param {string} name
+ * @param {string} unit
+ * @param {Set<string>} takenIds
+ * @returns {Ingredient}
+ */
+export function createNewIngredient(name, unit, takenIds) {
+  const cleanName = name.trim();
+  return buildIngredientRecord({
+    id: createIngredientId(cleanName, takenIds),
+    name: cleanName,
+    unit,
+    category: "",
+    packageSize: undefined,
+    packagePrice: undefined,
+    whereToBuy: "",
+  });
+}
+
+/**
+ * Turns the new-ingredient rows of the inventory page into ingredients.
+ * Completely empty rows are dropped without a message. Rows with a missing name or unit,
+ * an invalid amount or a name that already exists stay in `remaining` and get a warning.
+ * @param {NewIngredientDraft[]} drafts
+ * @param {Ingredient[]} ingredients The ingredients that exist now.
+ * @returns {{
+ *   created: { ingredient: Ingredient, amount: number | null }[],
+ *   remaining: NewIngredientDraft[],
+ *   warnings: string[]
+ * }}
+ */
+export function createIngredientsFromDrafts(drafts, ingredients) {
+  const known = [...ingredients];
+  const takenIds = new Set(known.map((ingredient) => ingredient.id));
+  /** @type {{ ingredient: Ingredient, amount: number | null }[]} */
+  const created = [];
+  /** @type {NewIngredientDraft[]} */
+  const remaining = [];
+  /** @type {string[]} */
+  const warnings = [];
+
+  for (const draft of drafts) {
+    const name = draft.name.trim();
+    const unit = draft.unit.trim();
+    const amountText = draft.amount.trim();
+
+    if (name === "" && unit === "" && amountText === "") continue;
+
+    if (name === "" || unit === "") {
+      warnings.push("A new ingredient needs a name and a unit. Fill in both or discard the changes.");
+      remaining.push(draft);
+      continue;
+    }
+
+    const amount = amountText === "" ? null : Number(amountText);
+    if (amount !== null && (!Number.isFinite(amount) || amount < 0)) {
+      warnings.push(`The amount of "${name}" is not a valid number.`);
+      remaining.push(draft);
+      continue;
+    }
+
+    if (hasIngredientName(known, name)) {
+      warnings.push(
+        `An ingredient named "${name}" already exists. Use another name, or enter the amount in the existing ingredient.`,
+      );
+      remaining.push(draft);
+      continue;
+    }
+
+    const ingredient = createNewIngredient(name, unit, takenIds);
+    takenIds.add(ingredient.id);
+    known.push(ingredient);
+    created.push({ ingredient, amount });
+  }
+
+  return { created, remaining, warnings: [...new Set(warnings)] };
 }
 
 /**
@@ -202,8 +324,8 @@ export function convertRecipeAmounts(recipe, ingredientId, factor) {
 }
 
 /**
- * Groups ingredients by category. Categories are sorted alphabetically, the group
- * without category comes last. Ingredients are sorted by name.
+ * Groups ingredients by category. Categories are sorted alphabetically. The group
+ * without category (UNCATEGORIZED_TITLE) always comes last. Ingredients are sorted by name.
  * @param {Ingredient[]} ingredients
  * @returns {{ title: string, ingredients: Ingredient[] }[]}
  */
@@ -216,9 +338,14 @@ export function groupByCategory(ingredients) {
   }
 
   return [...byCategory]
-    .sort(([a], [b]) => compareNullableText(a, b))
+    .sort(([a], [b]) => {
+      if (a === b) return 0;
+      if (a === null) return 1;
+      if (b === null) return -1;
+      return compareText(a, b);
+    })
     .map(([category, list]) => ({
-      title: category ?? UNCATEGORIZED,
+      title: category ?? UNCATEGORIZED_TITLE,
       ingredients: [...list].sort((a, b) => compareText(a.name, b.name)),
     }));
 }
