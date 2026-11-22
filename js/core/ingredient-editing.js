@@ -2,7 +2,7 @@
 // Rules for ingredients: checking, building the stored record, creating ingredients from
 // the inventory page, unit conversion of recipes, merging with the ingredients saved in
 // this browser, and grouping. Pure functions, no DOM.
-import { compareText, isPlainObject } from "./utils.js";
+import { comparableName, compareNullableText, compareText, isPlainObject } from "./utils.js";
 
 /** @typedef {import("./types.js").Ingredient} Ingredient */
 /** @typedef {import("./types.js").Recipe} Recipe */
@@ -43,12 +43,16 @@ export function roundAmount(value) {
 }
 
 /**
- * Checks a draft. takenIds is only given for new ingredients.
+ * Checks a draft. takenIds is only given for new ingredients. existing lists the ingredients
+ * that exist now. A name that matches another ingredient (see comparableName) is refused.
+ * The ingredient itself is not a match, because it has the same id. Without existing, the
+ * name is not compared with anything.
  * @param {IngredientDraft} draft
  * @param {Set<string> | null} takenIds
+ * @param {Ingredient[]} [existing]
  * @returns {string[]} Messages for the user, empty if the draft is valid.
  */
-export function validateIngredientDraft(draft, takenIds) {
+export function validateIngredientDraft(draft, takenIds, existing = []) {
   /** @type {string[]} */
   const errors = [];
 
@@ -62,6 +66,13 @@ export function validateIngredientDraft(draft, takenIds) {
   }
   if (draft.unit.trim() === "") {
     errors.push("The ingredient needs a unit, for example g, piece or clove.");
+  }
+
+  const nameTaken = existing.some(
+    (item) => item.id !== draft.id && comparableName(item.name) === comparableName(draft.name),
+  );
+  if (nameTaken) {
+    errors.push(`An ingredient named "${draft.name.trim()}" already exists.`);
   }
 
   const hasSize = draft.packageSize !== undefined;
@@ -123,14 +134,14 @@ export function createIngredientId(name, takenIds) {
 }
 
 /**
- * True if an ingredient with this name exists. The comparison ignores case and surrounding spaces.
+ * True if an ingredient with this name exists. The comparison uses comparableName.
  * @param {Ingredient[]} ingredients
  * @param {string} name
  * @returns {boolean}
  */
 export function hasIngredientName(ingredients, name) {
-  const wanted = name.trim().toLowerCase();
-  return ingredients.some((ingredient) => ingredient.name.trim().toLowerCase() === wanted);
+  const wanted = comparableName(name);
+  return ingredients.some((ingredient) => comparableName(ingredient.name) === wanted);
 }
 
 /**
@@ -214,6 +225,8 @@ export function createIngredientsFromDrafts(drafts, ingredients) {
 
 /**
  * Reads an ingredient list imported by the user. Throws with a message if it is not valid.
+ * Names are checked only within the file, not against the ingredients already saved.
+ * Categories and shops are stored as they are in the file.
  * @param {unknown} data Parsed JSON content of the file.
  * @returns {Ingredient[]}
  */
@@ -324,28 +337,31 @@ export function convertRecipeAmounts(recipe, ingredientId, factor) {
 }
 
 /**
- * Groups ingredients by category. Categories are sorted alphabetically. The group
- * without category (UNCATEGORIZED_TITLE) always comes last. Ingredients are sorted by name.
+ * Groups ingredients by category. Categories that differ only in capital letters or spaces
+ * form one group (see comparableName). The title of a group is its alphabetically first
+ * spelling. Groups are sorted by title, the group without category (UNCATEGORIZED_TITLE)
+ * always comes last. Ingredients are sorted by name.
  * @param {Ingredient[]} ingredients
  * @returns {{ title: string, ingredients: Ingredient[] }[]}
  */
 export function groupByCategory(ingredients) {
-  /** @type {Map<string | null, Ingredient[]>} */
-  const byCategory = new Map();
+  /** @type {Map<string | null, { title: string | null, ingredients: Ingredient[] }>} */
+  const groups = new Map();
   for (const ingredient of ingredients) {
-    const key = ingredient.category ?? null;
-    byCategory.set(key, [...(byCategory.get(key) ?? []), ingredient]);
+    const category = ingredient.category ?? null;
+    const key = category === null ? null : comparableName(category);
+    const group = groups.get(key) ?? { title: category, ingredients: [] };
+    if (category !== null && group.title !== null && compareText(category, group.title) < 0) {
+      group.title = category;
+    }
+    group.ingredients.push(ingredient);
+    groups.set(key, group);
   }
 
-  return [...byCategory]
-    .sort(([a], [b]) => {
-      if (a === b) return 0;
-      if (a === null) return 1;
-      if (b === null) return -1;
-      return compareText(a, b);
-    })
-    .map(([category, list]) => ({
-      title: category ?? UNCATEGORIZED_TITLE,
-      ingredients: [...list].sort((a, b) => compareText(a.name, b.name)),
+  return [...groups.values()]
+    .sort((a, b) => compareNullableText(a.title, b.title))
+    .map((group) => ({
+      title: group.title ?? UNCATEGORIZED_TITLE,
+      ingredients: [...group.ingredients].sort((a, b) => compareText(a.name, b.name)),
     }));
 }

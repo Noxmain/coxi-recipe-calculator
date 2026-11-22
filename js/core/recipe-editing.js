@@ -1,11 +1,26 @@
 // @ts-check
 // Rules for creating, importing and editing recipes. Pure functions, no DOM.
 // A recipe file has the same shape as recipes/<id>.json (see schemas/recipe.schema.json).
-import { isPlainObject } from "./utils.js";
+import { createNewIngredient } from "./ingredient-editing.js";
+import { comparableName, isPlainObject } from "./utils.js";
 import { isWholeNumberAtLeastOne } from "./planner.js";
+
+// comparableName lives in utils.js. It is re-exported here, so the recipe editor and the
+// tests can keep importing it from this file.
+export { comparableName };
 
 /** @typedef {import("./types.js").Recipe} Recipe */
 /** @typedef {import("./types.js").Ingredient} Ingredient */
+
+/**
+ * A row of the recipe form. A known ingredient has its id. An ingredient that does not
+ * exist yet has an empty ingredientId and the typed name and unit in newIngredient.
+ * Its id is given by resolveNewIngredients when the recipe is saved or downloaded.
+ * @typedef {Object} DraftIngredient
+ * @property {string} ingredientId
+ * @property {number} amount
+ * @property {{ name: string, unit: string }} [newIngredient]
+ */
 
 /**
  * A recipe as it is edited in the form. Empty optional numbers are undefined.
@@ -15,7 +30,7 @@ import { isWholeNumberAtLeastOne } from "./planner.js";
  * @property {"main" | "spread" | "other"} type
  * @property {number} [servings]
  * @property {number} [portionWeight]
- * @property {{ ingredientId: string, amount: number }[]} ingredients
+ * @property {DraftIngredient[]} ingredients
  * @property {string[]} steps
  */
 
@@ -54,9 +69,21 @@ export function createUniqueId(name, takenIds) {
 }
 
 /**
+ * The ingredient with this name, compared with comparableName.
+ * @param {Ingredient[]} ingredients
+ * @param {string} name
+ * @returns {Ingredient | undefined}
+ */
+export function findIngredientByName(ingredients, name) {
+  const wanted = comparableName(name);
+  if (wanted === "") return undefined;
+  return ingredients.find((ingredient) => comparableName(ingredient.name) === wanted);
+}
+
+/**
  * Checks a draft against the recipe rules. Returns messages for the user, an
  * empty list if the draft is valid. takenIds is only given for new recipes, so
- * their id must not exist yet.
+ * their id must not exist yet. New ingredients need a name and a unit.
  * @param {RecipeDraft} draft
  * @param {Map<string, Ingredient>} ingredientsById
  * @param {Set<string> | null} takenIds
@@ -87,9 +114,23 @@ export function validateRecipeDraft(draft, ingredientsById, takenIds) {
   if (draft.ingredients.length === 0) {
     errors.push("Add at least one ingredient.");
   }
-  for (const { ingredientId, amount } of draft.ingredients) {
-    if (ingredientId === "") {
-      errors.push("Choose every ingredient from the list.");
+
+  /** @type {Map<string, string>} Unit of each new ingredient, by its comparable name. */
+  const newUnits = new Map();
+  for (const { ingredientId, amount, newIngredient } of draft.ingredients) {
+    if (newIngredient) {
+      const name = newIngredient.name.trim();
+      const unit = newIngredient.unit.trim();
+      const key = comparableName(name);
+      if (unit === "") {
+        errors.push(`The new ingredient "${name}" needs a unit.`);
+      } else if (newUnits.has(key) && newUnits.get(key) !== unit) {
+        errors.push(`The new ingredient "${name}" is used with two different units.`);
+      } else {
+        newUnits.set(key, unit);
+      }
+    } else if (ingredientId === "") {
+      errors.push("Every ingredient row needs an ingredient name.");
     } else if (!ingredientsById.has(ingredientId)) {
       errors.push(`Unknown ingredient "${ingredientId}".`);
     }
@@ -105,8 +146,42 @@ export function validateRecipeDraft(draft, ingredientsById, takenIds) {
 }
 
 /**
+ * Gives every row of a checked draft its ingredient id. Ingredients that do not exist yet
+ * are created from their name and unit. Rows that name the same new ingredient, compared
+ * with comparableName, share one ingredient. Call this only after validateRecipeDraft has passed.
+ * @param {RecipeDraft} draft
+ * @param {Ingredient[]} ingredients All ingredients that exist now.
+ * @returns {{ created: Ingredient[], draft: RecipeDraft }} The new ingredients, and the
+ *   draft with an id in every row.
+ */
+export function resolveNewIngredients(draft, ingredients) {
+  const takenIds = new Set(ingredients.map((ingredient) => ingredient.id));
+  /** @type {Map<string, string>} Id of each new ingredient, by its comparable name. */
+  const idByName = new Map();
+  /** @type {Ingredient[]} */
+  const created = [];
+
+  const rows = draft.ingredients.map(({ ingredientId, amount, newIngredient }) => {
+    if (!newIngredient) {
+      return { ingredientId, amount };
+    }
+    const key = comparableName(newIngredient.name);
+    if (!idByName.has(key)) {
+      const ingredient = createNewIngredient(newIngredient.name, newIngredient.unit, takenIds);
+      takenIds.add(ingredient.id);
+      created.push(ingredient);
+      idByName.set(key, ingredient.id);
+    }
+    return { ingredientId: /** @type {string} */ (idByName.get(key)), amount };
+  });
+
+  return { created, draft: { ...draft, ingredients: rows } };
+}
+
+/**
  * The content of a recipe file for a checked draft. Empty optional fields are
- * left out, the steps are trimmed and empty steps are removed.
+ * left out, the steps are trimmed and empty steps are removed. Every row must
+ * already have an ingredient id (see resolveNewIngredients).
  * @param {RecipeDraft} draft
  * @returns {Recipe}
  */

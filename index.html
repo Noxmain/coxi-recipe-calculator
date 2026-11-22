@@ -125,7 +125,11 @@
             <span class="share-option-hint">For a link that opened in the browser instead of this app</span>
           </span>
         </button>
+      </div>
 
+      <h3 class="share-section-title">Settings</h3>
+
+      <div class="share-actions">
         <a class="share-option" href="inventory/">
           <span class="share-option-icon">
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="icons/sprite.svg#inventory"/></svg>
@@ -156,6 +160,16 @@
           </span>
         </a>
 
+        <button id="export-changes" type="button" class="share-option share-option-danger" hidden>
+          <span class="share-option-icon">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="icons/sprite.svg#download"/></svg>
+          </span>
+          <span class="share-option-text">
+            <span class="share-option-title">Export all local changes</span>
+            <span class="share-option-hint">One file per change, ready for a pull request</span>
+          </span>
+        </button>
+        
         <button id="data-reset" type="button" class="share-option share-option-danger">
           <span class="share-option-icon">
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="icons/sprite.svg#trash"/></svg>
@@ -215,6 +229,7 @@
   <script src="vendor/qrcode-generator/qrcode.js"></script>
   <script type="module" src="js/pwa.js"></script>
   <script type="module" src="js/ui/reset-data.js"></script>
+  <script type="module" src="js/ui/export-changes.js"></script>
   <script type="module" src="js/pages/main.js"></script>
 </body>
 </html>

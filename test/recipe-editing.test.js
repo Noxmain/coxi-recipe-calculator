@@ -2,15 +2,19 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   buildRecipeFile,
+  comparableName,
   createUniqueId,
+  findIngredientByName,
   readRecipeFile,
+  resolveNewIngredients,
   slugify,
   validateRecipeDraft,
 } from "../js/core/recipe-editing.js";
 import { mergeRecipes } from "../js/core/recipes.js";
 import { indexById } from "../js/core/utils.js";
 
-const ingredientsById = indexById([{ id: "onion", name: "Onion", unit: "piece" }]);
+const ingredients = [{ id: "onion", name: "Onion", unit: "piece" }];
+const ingredientsById = indexById(ingredients);
 
 /** @type {import("../js/core/recipe-editing.js").RecipeDraft} */
 const draft = {
@@ -33,6 +37,21 @@ test("createUniqueId adds a counter when the id is taken", () => {
   assert.equal(createUniqueId("!!!", new Set()), "recipe");
 });
 
+test("comparable names ignore case and all spaces", () => {
+  assert.equal(comparableName(" Bread"), "bread");
+  assert.equal(comparableName("Br ead"), "bread");
+  assert.equal(comparableName("Bread "), "bread");
+  assert.equal(comparableName("Red  Pesto"), comparableName("redpesto"));
+});
+
+test("an ingredient is found by name despite case, spaces and typing mistakes of this kind", () => {
+  assert.equal(findIngredientByName(ingredients, "  onion ")?.id, "onion");
+  assert.equal(findIngredientByName(ingredients, "O n ion")?.id, "onion");
+  assert.equal(findIngredientByName(ingredients, "ONION"), ingredients[0]);
+  assert.equal(findIngredientByName(ingredients, "Leek"), undefined);
+  assert.equal(findIngredientByName(ingredients, "  "), undefined);
+});
+
 test("a complete draft is valid", () => {
   assert.deepEqual(validateRecipeDraft(draft, ingredientsById, null), []);
 });
@@ -42,7 +61,7 @@ test("a draft without name is rejected", () => {
   assert.match(errors.join(" "), /needs a name/);
 });
 
-test("an unknown ingredient is reported by id", () => {
+test("an unknown ingredient id is reported", () => {
   const errors = validateRecipeDraft(
     { ...draft, ingredients: [{ ingredientId: "leek", amount: 1 }] },
     ingredientsById,
@@ -51,13 +70,47 @@ test("an unknown ingredient is reported by id", () => {
   assert.match(errors.join(" "), /Unknown ingredient "leek"/);
 });
 
-test("an ingredient row without selection is reported", () => {
+test("an ingredient row without a name is reported", () => {
   const errors = validateRecipeDraft(
     { ...draft, ingredients: [{ ingredientId: "", amount: 1 }] },
     ingredientsById,
     null,
   );
-  assert.match(errors.join(" "), /Choose every ingredient/);
+  assert.match(errors.join(" "), /Every ingredient row needs an ingredient name/);
+});
+
+test("a new ingredient is valid when it has a unit", () => {
+  const errors = validateRecipeDraft(
+    { ...draft, ingredients: [{ ingredientId: "", amount: 2, newIngredient: { name: "Basil", unit: "g" } }] },
+    ingredientsById,
+    null,
+  );
+  assert.deepEqual(errors, []);
+});
+
+test("a new ingredient without a unit is rejected without an example in the message", () => {
+  const errors = validateRecipeDraft(
+    { ...draft, ingredients: [{ ingredientId: "", amount: 2, newIngredient: { name: "Basil", unit: " " } }] },
+    ingredientsById,
+    null,
+  );
+  assert.match(errors.join(" "), /"Basil" needs a unit\./);
+  assert.doesNotMatch(errors.join(" "), /for example/);
+});
+
+test("new rows with the same name and different units are rejected", () => {
+  const errors = validateRecipeDraft(
+    {
+      ...draft,
+      ingredients: [
+        { ingredientId: "", amount: 2, newIngredient: { name: "Basil", unit: "g" } },
+        { ingredientId: "", amount: 1, newIngredient: { name: "basil", unit: "bunch" } },
+      ],
+    },
+    ingredientsById,
+    null,
+  );
+  assert.match(errors.join(" "), /two different units/);
 });
 
 test("an amount of 0 is rejected", () => {
@@ -92,6 +145,64 @@ test("a new recipe must not use an existing id", () => {
 test("an invalid id is rejected", () => {
   const errors = validateRecipeDraft({ ...draft, id: "Red Pesto" }, ingredientsById, null);
   assert.match(errors.join(" "), /lowercase letters/);
+});
+
+test("new ingredients are created with ids, and rows with the same name share one", () => {
+  const existing = [{ id: "basil", name: "Sweet basil", unit: "g" }];
+  const result = resolveNewIngredients(
+    {
+      ...draft,
+      ingredients: [
+        { ingredientId: "onion", amount: 1 },
+        { ingredientId: "", amount: 5, newIngredient: { name: "Basil", unit: "g" } },
+        { ingredientId: "", amount: 3, newIngredient: { name: "basil", unit: "g" } },
+      ],
+    },
+    existing,
+  );
+  assert.deepEqual(result.created, [{ id: "basil-2", name: "Basil", unit: "g" }]);
+  assert.deepEqual(result.draft.ingredients, [
+    { ingredientId: "onion", amount: 1 },
+    { ingredientId: "basil-2", amount: 5 },
+    { ingredientId: "basil-2", amount: 3 },
+  ]);
+});
+
+test("typing variants of one new name create one ingredient", () => {
+  const result = resolveNewIngredients(
+    {
+      ...draft,
+      ingredients: [
+        { ingredientId: "", amount: 1, newIngredient: { name: "Sea salt", unit: "g" } },
+        { ingredientId: "", amount: 2, newIngredient: { name: "Sea  Salt ", unit: "g" } },
+        { ingredientId: "", amount: 3, newIngredient: { name: "Se a salt", unit: "g" } },
+      ],
+    },
+    ingredients,
+  );
+  assert.equal(result.created.length, 1);
+  assert.deepEqual(
+    result.draft.ingredients.map((entry) => entry.ingredientId),
+    ["sea-salt", "sea-salt", "sea-salt"],
+  );
+});
+
+test("a recipe without new ingredients creates nothing", () => {
+  const result = resolveNewIngredients(draft, ingredients);
+  assert.deepEqual(result.created, []);
+  assert.deepEqual(result.draft.ingredients, [{ ingredientId: "onion", amount: 1 }]);
+});
+
+test("the recipe file of a resolved draft has no new-ingredient fields", () => {
+  const resolved = resolveNewIngredients(
+    {
+      ...draft,
+      ingredients: [{ ingredientId: "", amount: 2, newIngredient: { name: "Basil", unit: "g" } }],
+    },
+    ingredients,
+  );
+  const file = buildRecipeFile(resolved.draft);
+  assert.deepEqual(file.ingredients, [{ ingredientId: "basil", amount: 2 }]);
 });
 
 test("the recipe file leaves out an empty portion weight and trims the steps", () => {

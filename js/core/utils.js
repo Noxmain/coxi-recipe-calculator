@@ -54,3 +54,29 @@ export function compareNullableText(a, b) {
 export function isPlainObject(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
+
+/**
+ * Form of a name used for comparing. Capital letters and all spaces are ignored, so
+ * " Bread", "Br ead" and "Bread " all give "bread". Every free-text value that is compared
+ * with an existing value uses this function: names, categories and shops. Units are not
+ * compared with it.
+ * @param {string} name
+ * @returns {string}
+ */
+export function comparableName(name) {
+  return name.replace(/\s+/g, "").toLowerCase();
+}
+
+/**
+ * The spelling that is already in use for a free-text value. If one of the existing values
+ * matches with comparableName, its spelling is returned. Otherwise the trimmed value is returned.
+ * @param {string} value
+ * @param {string[]} existingValues
+ * @returns {string}
+ */
+export function existingSpelling(value, existingValues) {
+  const trimmed = value.trim();
+  if (trimmed === "") return "";
+  const wanted = comparableName(trimmed);
+  return existingValues.find((existing) => comparableName(existing) === wanted) ?? trimmed;
+}

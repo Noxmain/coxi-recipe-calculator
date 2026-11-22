@@ -5,7 +5,7 @@
 // The page applies the factor to recipes, package sizes and the stored inventory.
 import { buildIngredientRecord, roundAmount, validateIngredientDraft } from "../core/ingredient-editing.js";
 import { createUniqueId } from "../core/recipe-editing.js";
-import { compareText } from "../core/utils.js";
+import { compareText, existingSpelling } from "../core/utils.js";
 
 /** @typedef {import("../core/types.js").Ingredient} Ingredient */
 /** @typedef {import("../core/ingredient-editing.js").IngredientDraft} IngredientDraft */
@@ -28,7 +28,7 @@ import { compareText } from "../core/utils.js";
 /**
  * @typedef {Object} OpenOptions
  * @property {Ingredient | null} ingredient Null for a new ingredient.
- * @property {Ingredient[]} allIngredients Source of the suggestions and of the ids a new ingredient must not use.
+ * @property {Ingredient[]} allIngredients Source of the suggestions, of the names that must not be used twice and of the ids a new ingredient must not use.
  * @property {string[]} usingRecipeNames Names of the recipes that use this ingredient.
  * @property {string | null} discardLabel Text of the discard button, or null to hide it.
  */
@@ -91,6 +91,8 @@ export function createIngredientEditor({ onSave, onDiscard, onBack }) {
   let baseUnit = /** @type {string | null} */ (null);
   /** Ids a new ingredient must not use. Null when an existing ingredient is edited. */
   let takenIds = /** @type {Set<string> | null} */ (null);
+  /** All ingredients that exist now. Their names, categories and shops are reused when they match. */
+  let knownIngredients = /** @type {Ingredient[]} */ ([]);
   /** @type {string[]} */
   let usingNames = [];
 
@@ -111,6 +113,7 @@ export function createIngredientEditor({ onSave, onDiscard, onBack }) {
     currentId = ingredient ? ingredient.id : null;
     baseUnit = ingredient ? ingredient.unit : null;
     takenIds = ingredient ? null : new Set(allIngredients.map((item) => item.id));
+    knownIngredients = allIngredients;
     usingNames = usingRecipeNames;
 
     nameInput.value = ingredient ? ingredient.name : "";
@@ -173,17 +176,22 @@ export function createIngredientEditor({ onSave, onDiscard, onBack }) {
 
   function save() {
     const name = nameInput.value.trim();
+    const categories = knownIngredients.flatMap((item) => (item.category ? [item.category] : []));
+    const shops = knownIngredients.flatMap((item) => (item.whereToBuy ? [item.whereToBuy] : []));
+
     /** @type {IngredientDraft} */
     const draft = {
       id: currentId ?? createUniqueId(name, takenIds ?? new Set()),
       name,
       unit: unitInput.value.trim(),
-      category: categoryInput.value.trim(),
+      // A category or shop that differs only in case or spaces from an existing one
+      // takes the spelling that is already in use.
+      category: existingSpelling(categoryInput.value, categories),
       packageSize: optionalNumber(sizeInput),
       packagePrice: optionalNumber(priceInput),
-      whereToBuy: shopInput.value.trim(),
+      whereToBuy: existingSpelling(shopInput.value, shops),
     };
-    const errors = validateIngredientDraft(draft, takenIds);
+    const errors = validateIngredientDraft(draft, takenIds, knownIngredients);
 
     /** @type {number | null} */
     let factor = null;

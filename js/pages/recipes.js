@@ -1,14 +1,19 @@
 // @ts-check
 // Recipe page. Lists all recipes, creates and edits them in the local storage of this
 // browser, imports recipe files and downloads single recipes as JSON or PDF. The main
-// page uses saved recipes after it is reloaded. Repository files change only through
-// pull requests.
+// page uses saved recipes after it is reloaded. New ingredients of a recipe are saved
+// here too. Repository files change only through pull requests.
 import { readRecipeFile } from "../core/recipe-editing.js";
 import { getServings, mergeRecipes } from "../core/recipes.js";
 import { compareText, indexById } from "../core/utils.js";
 import { loadAppData } from "../data.js";
 import { buildRecipesPdf } from "../pdf/documents.js";
-import { deleteLocalRecipe, readLocalRecipes, saveLocalRecipe } from "../storage.js";
+import {
+  deleteLocalRecipe,
+  readLocalRecipes,
+  saveLocalIngredient,
+  saveLocalRecipe,
+} from "../storage.js";
 import { createIcon } from "../ui/icon.js";
 import { createRecipeEditor } from "../ui/recipe-editor.js";
 
@@ -48,10 +53,12 @@ function start(ingredients, repoRecipes) {
 
   const editor = createRecipeEditor({
     ingredients,
-    onSave: (recipe) => {
+    onSave: (recipe, created) => {
+      saveCreatedIngredients(created);
       saveLocalRecipe(recipe);
       showList();
     },
+    onIngredientsCreated: saveCreatedIngredients,
     onDiscard: (id) => {
       const message = repoById.has(id)
         ? "Discard your changes? The repository version will be used again."
@@ -67,6 +74,14 @@ function start(ingredients, repoRecipes) {
   searchInput.addEventListener("input", renderList);
   fileInput.addEventListener("change", importFile);
   showList();
+
+  /** Stores ingredients that a recipe created, so every page uses them. */
+  function saveCreatedIngredients(created) {
+    for (const ingredient of created) {
+      saveLocalIngredient(ingredient);
+      ingredientsById.set(ingredient.id, ingredient);
+    }
+  }
 
   function showList() {
     editorView.hidden = true;

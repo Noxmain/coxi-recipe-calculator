@@ -306,6 +306,13 @@
   color: var(--color-alert);
 }
 
+/* Heading that separates the groups of the settings dialog. */
+.share-section-title {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
 .share-paste-field,
 .share-confirm {
   margin-top: 1rem;
@@ -533,7 +540,7 @@
 
 /* Ingredient row in the editor: search, amount, unit, remove. */
 .row.ingredient-row {
-  grid-template-columns: minmax(0, 1fr) 6rem 3.5rem 2.5rem;
+  grid-template-columns: minmax(0, 1fr) 6rem 5rem 2.5rem;
 }
 
 .row.ingredient-row .row-recipe-field,
@@ -544,6 +551,27 @@
 
 .ingredient-unit {
   padding-left: 0.25rem;
+}
+
+/* Unit of an ingredient that does not exist yet: a text field. */
+.ingredient-unit-input {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius);
+}
+
+.ingredient-unit-input:hover,
+.ingredient-unit-input:focus {
+  background: var(--color-hover);
+}
+
+.ingredient-unit-input:focus {
+  outline: none;
 }
 
 /* Working steps: numbered list, each step with a text area and a remove button. */
@@ -585,7 +613,7 @@
 
 @media (max-width: 36rem) {
   .row.ingredient-row {
-    grid-template-columns: minmax(0, 1fr) 4.5rem 3rem 2.5rem;
+    grid-template-columns: minmax(0, 1fr) 4.5rem 4rem 2.5rem;
   }
 }
 
