@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "pesto-rosso",
+  "name": "Pesto rosso",
+  "type": "spread",
+  "servings": 1,
+  "portionWeight": 400,
+  "ingredients": [
+    {
+      "ingredientId": "basil-fresh",
+      "amount": 10
+    },
+    {
+      "ingredientId": "garlic",
+      "amount": 0.3
+    },
+    {
+      "ingredientId": "dried-tomato-oil-byproduct",
+      "amount": 45
+    },
+    {
+      "ingredientId": "dried-tomatos-in-oil",
+      "amount": 100
+    },
+    {
+      "ingredientId": "tomato-paste",
+      "amount": 120
+    },
+    {
+      "ingredientId": "walnuts-crushed",
+      "amount": 0.1
+    }
+  ],
+  "steps": [
+    "Todo\nOregano and basil are already in the dried tomato oil.\nAdd salt and pepper as spices."
+  ]
+}

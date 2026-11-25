@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "id": "vege-don",
+  "name": "Vege don",
+  "type": "main",
+  "servings": 1,
+  "portionWeight": 100,
+  "ingredients": [
+    {
+      "ingredientId": "broccoli",
+      "amount": 8
+    },
+    {
+      "ingredientId": "ginger",
+      "amount": 2
+    },
+    {
+      "ingredientId": "carrots",
+      "amount": 7
+    },
+    {
+      "ingredientId": "garlic",
+      "amount": 0.04
+    },
+    {
+      "ingredientId": "msg-powder",
+      "amount": 0.5
+    },
+    {
+      "ingredientId": "starch",
+      "amount": 1.7
+    },
+    {
+      "ingredientId": "olive-oil",
+      "amount": 4.5
+    },
+    {
+      "ingredientId": "black-pepper",
+      "amount": 0.08
+    },
+    {
+      "ingredientId": "shiitake-mushrooms",
+      "amount": 5
+    },
+    {
+      "ingredientId": "rice-dry",
+      "amount": 16
+    },
+    {
+      "ingredientId": "rice-vinigar-mirin",
+      "amount": 2.6
+    },
+    {
+      "ingredientId": "bell-pepper",
+      "amount": 8
+    },
+    {
+      "ingredientId": "tofu",
+      "amount": 14
+    },
+    {
+      "ingredientId": "bean-sprouts",
+      "amount": 7.4
+    },
+    {
+      "ingredientId": "soy-sauce",
+      "amount": 10
+    },
+    {
+      "ingredientId": "lemon-juice",
+      "amount": 2.6
+    },
+    {
+      "ingredientId": "brown-sugar",
+      "amount": 2.6
+    },
+    {
+      "ingredientId": "spring-onion",
+      "amount": 1.3
+    },
+    {
+      "ingredientId": "onion",
+      "amount": 13
+    },
+    {
+      "ingredientId": "water",
+      "amount": 10
+    },
+    {
+      "ingredientId": "plant-oil",
+      "amount": 0.008
+    },
+    {
+      "ingredientId": "enokii-mushrooms",
+      "amount": 13
+    },
+    {
+      "ingredientId": "vegan-mushroom-stir-fry-sauce",
+      "amount": 2.6
+    },
+    {
+      "ingredientId": "edamame-peeled",
+      "amount": 4
+    },
+    {
+      "ingredientId": "seawheat-sheets",
+      "amount": 0.5
+    },
+    {
+      "ingredientId": "sesame-seeds",
+      "amount": 0.5
+    }
+  ],
+  "steps": [
+    "0.5.  Rehydrate Shrooms as stated on the package\n1.  cook Rice (without salt!)\n2.   cook seawheat sheets shortly with the water\n3.  cut veggie (carrots in small cubes, brocoli in small uneven pieces, bellpepper in small stripes, shrooms in cubes, beansprous halfed and spring onions in rings)\n4. fry veggie with 1/4 of the olive oil (carrots first, than bellpeper than shrooms and at the „end“ the rest above ((only springonion whites)(including edamame)) \n5. dry tofu and coat with starch and pepper, than fry immediately wit canola oil.\n6.  grate garlic and ginger, cut onion in fine pieces. mix with 3/4 of the olive oil, tamrin, mirin, MSG, LimeJuice, sugar and Mushroom stir fry sauce. than bring to a boil and let it simmer a bit\n7.  add vegg and rice together and stir. at the end add the sauce while stiring \n8. than sprikel with seasame and springonion greens (mix again)"
+  ]
+}

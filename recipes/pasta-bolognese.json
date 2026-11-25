@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "id": "pasta-bolognese",
+  "name": "Pasta bolognese",
+  "type": "main",
+  "servings": 3,
+  "ingredients": [
+    {
+      "ingredientId": "pasta",
+      "amount": 0.5
+    },
+    {
+      "ingredientId": "passata",
+      "amount": 800
+    },
+    {
+      "ingredientId": "onion",
+      "amount": 125
+    },
+    {
+      "ingredientId": "carrots",
+      "amount": 250
+    },
+    {
+      "ingredientId": "minced-soy-dry",
+      "amount": 100
+    },
+    {
+      "ingredientId": "vegetable-broth-powder",
+      "amount": 20
+    },
+    {
+      "ingredientId": "soy-sauce",
+      "amount": 70
+    },
+    {
+      "ingredientId": "plant-oil",
+      "amount": 0.07
+    },
+    {
+      "ingredientId": "herbs-de-provence",
+      "amount": 5
+    },
+    {
+      "ingredientId": "garlic",
+      "amount": 0.24
+    }
+  ],
+  "steps": [
+    "Start early: boil water",
+    "Cook pasta",
+    "Let minced soy soak in vegetable broth",
+    "Cut vegetables",
+    "Fry onions, add drained minced soy, add carrots",
+    "Add garlic, passata, soy sauce, and herbs"
+  ]
+}

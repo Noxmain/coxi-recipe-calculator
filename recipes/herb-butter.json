@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "herb-butter",
+  "name": "Herb butter",
+  "type": "spread",
+  "servings": 1,
+  "portionWeight": 60,
+  "ingredients": [
+    {
+      "ingredientId": "basil-fresh",
+      "amount": 12
+    },
+    {
+      "ingredientId": "garlic",
+      "amount": 0.012
+    },
+    {
+      "ingredientId": "margarine",
+      "amount": 0.054
+    },
+    {
+      "ingredientId": "black-pepper",
+      "amount": 5
+    },
+    {
+      "ingredientId": "parsley-fresh",
+      "amount": 12
+    },
+    {
+      "ingredientId": "salt",
+      "amount": 2.4
+    },
+    {
+      "ingredientId": "lemon-juice",
+      "amount": 0.024
+    },
+    {
+      "ingredientId": "chives-fresh",
+      "amount": 12
+    }
+  ],
+  "steps": [
+    "Mince and mix"
+  ]
+}

@@ -1,8 +1,16 @@
 {
   "schemaVersion": 1,
   "recipes": [
-    "chili-sin-carne",
-    "pancakes",
-    "red-pesto"
+    "baba-ganoush",
+    "fried-potatoes",
+    "herb-butter",
+    "hummus-green",
+    "hummus-neutral",
+    "hummus-red",
+    "pasta-bolognese",
+    "pesto-rosso",
+    "spekulatius-spread",
+    "tomato-butter",
+    "vege-don"
   ]
 }

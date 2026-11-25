@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "baba-ganoush",
+  "name": "Baba Ganoush",
+  "type": "spread",
+  "servings": 1,
+  "portionWeight": 75,
+  "ingredients": [
+    {
+      "ingredientId": "aubergine",
+      "amount": 75
+    },
+    {
+      "ingredientId": "olive-oil",
+      "amount": 2
+    },
+    {
+      "ingredientId": "salt",
+      "amount": 0.6
+    },
+    {
+      "ingredientId": "tahini",
+      "amount": 5
+    },
+    {
+      "ingredientId": "lemon-juice",
+      "amount": 1
+    },
+    {
+      "ingredientId": "garlic",
+      "amount": 0.005
+    }
+  ],
+  "steps": [
+    "Preparation:\n1. Roast aubergine in the oven\n2. Separate meat and skin\n3. Mix meat with other ingredients",
+    "Tips:\n- You can fry the skin and eat them as a helper snack\n- Use a spoon to scoop out the meat after roasting\n- Forget the coriander"
+  ]
+}

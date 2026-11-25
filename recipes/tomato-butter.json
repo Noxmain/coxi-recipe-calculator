@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "tomato-butter",
+  "name": "Tomato butter",
+  "type": "spread",
+  "servings": 1,
+  "portionWeight": 100,
+  "ingredients": [
+    {
+      "ingredientId": "garlic",
+      "amount": 0.02
+    },
+    {
+      "ingredientId": "margarine",
+      "amount": 0.07
+    },
+    {
+      "ingredientId": "black-pepper",
+      "amount": 1
+    },
+    {
+      "ingredientId": "salt",
+      "amount": 3
+    },
+    {
+      "ingredientId": "lemon-juice",
+      "amount": 3
+    },
+    {
+      "ingredientId": "dried-tomatos-in-oil",
+      "amount": 20
+    },
+    {
+      "ingredientId": "tomato-paste",
+      "amount": 10
+    }
+  ],
+  "steps": [
+    "Mix everything"
+  ]
+}

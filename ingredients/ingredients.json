@@ -1,22 +1,569 @@
 {
   "schemaVersion": 1,
   "ingredients": [
-    { "id": "almonds", "name": "Almonds", "unit": "g", "category": "Nuts and seeds", "packageSize": 200, "packagePrice": 2.49, "whereToBuy": "Supermarket" },
-    { "id": "baking-powder", "name": "Baking powder", "unit": "g", "category": "Baking", "packageSize": 15, "packagePrice": 0.79, "whereToBuy": "Supermarket" },
-    { "id": "chickpeas-dried", "name": "Chickpeas, dried", "unit": "g", "category": "Legumes", "packageSize": 500, "packagePrice": 1.20, "whereToBuy": "Wholesale market" },
-    { "id": "chili-powder", "name": "Chili powder", "unit": "g", "category": "Spices", "packageSize": 50, "packagePrice": 1.39, "whereToBuy": "Supermarket" },
-    { "id": "chopped-tomatoes", "name": "Chopped tomatoes", "unit": "can", "category": "Canned goods", "packageSize": 1, "packagePrice": 0.79, "whereToBuy": "Supermarket" },
-    { "id": "flour", "name": "Wheat flour", "unit": "g", "category": "Baking", "packageSize": 1000, "packagePrice": 1.10, "whereToBuy": "Supermarket" },
-    { "id": "garlic", "name": "Garlic", "unit": "clove", "category": "Vegetables", "packageSize": 10, "packagePrice": 0.45, "whereToBuy": "Weekly market" },
-    { "id": "lemon", "name": "Lemon", "unit": "piece", "category": "Fruit", "packageSize": 1, "packagePrice": 0.50 },
-    { "id": "oat-milk", "name": "Oat milk", "unit": "ml", "category": "Dairy alternatives", "packageSize": 1000, "packagePrice": 1.49, "whereToBuy": "Supermarket" },
-    { "id": "olive-oil", "name": "Olive oil", "unit": "ml", "category": "Oils and vinegar", "packageSize": 1000, "packagePrice": 6.90, "whereToBuy": "Wholesale market" },
-    { "id": "onion", "name": "Onion", "unit": "piece", "category": "Vegetables", "packageSize": 1, "packagePrice": 0.35, "whereToBuy": "Weekly market" },
-    { "id": "red-bell-pepper", "name": "Red bell pepper", "unit": "piece", "category": "Vegetables", "packageSize": 1, "packagePrice": 0.89, "whereToBuy": "Weekly market" },
-    { "id": "red-kidney-beans", "name": "Red kidney beans, cooked", "unit": "can", "category": "Canned goods", "packageSize": 1, "packagePrice": 0.89, "whereToBuy": "Supermarket" },
-    { "id": "salt", "name": "Salt", "unit": "g", "category": "Spices", "packageSize": 1000, "packagePrice": 0.60, "whereToBuy": "Supermarket" },
-    { "id": "textured-soy-granules", "name": "Textured soy granules", "unit": "g", "category": "Dry goods", "packageSize": 500, "packagePrice": 2.99, "whereToBuy": "Wholesale market" },
-    { "id": "vegetable-stock-powder", "name": "Vegetable stock powder", "unit": "g", "category": "Spices", "packageSize": 1000, "packagePrice": 4.50, "whereToBuy": "Wholesale market" },
-    { "id": "water", "name": "Water", "unit": "ml" }
+    {
+      "id": "cocoa-baking",
+      "name": "Cocoa (baking)",
+      "unit": "g",
+      "category": "Baking",
+      "packageSize": 250,
+      "packagePrice": 3.3,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "baking-powder",
+      "name": "Baking powder",
+      "unit": "g",
+      "category": "Baking",
+      "packageSize": 64,
+      "packagePrice": 0.7,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "plant-oil",
+      "name": "Plant oil",
+      "unit": "L",
+      "category": "Oil and vinegar",
+      "packageSize": 1,
+      "packagePrice": 1.8,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "herbs-de-provence",
+      "name": "Herbs de provence",
+      "unit": "g",
+      "category": "Spices"
+    },
+    {
+      "id": "vanilla-sugar",
+      "name": "Vanilla sugar",
+      "unit": "g",
+      "category": "Baking",
+      "packageSize": 120,
+      "packagePrice": 0.4,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "chilli-powder",
+      "name": "Chilli powder",
+      "unit": "g",
+      "category": "Spices"
+    },
+    {
+      "id": "curry-powder",
+      "name": "Curry powder",
+      "unit": "g",
+      "category": "Spices"
+    },
+    {
+      "id": "cinnamon-powder",
+      "name": "Cinnamon powder",
+      "unit": "g",
+      "category": "Spices"
+    },
+    {
+      "id": "garam-masala",
+      "name": "Garam masala",
+      "unit": "g",
+      "category": "Spices"
+    },
+    {
+      "id": "cloves",
+      "name": "Cloves",
+      "unit": "g",
+      "category": "Spices"
+    },
+    {
+      "id": "star-aniseeds",
+      "name": "Star aniseeds",
+      "unit": "g",
+      "category": "Spices"
+    },
+    {
+      "id": "rum-aroma",
+      "name": "Rum aroma",
+      "unit": "ml",
+      "category": "Baking"
+    },
+    {
+      "id": "starch",
+      "name": "Starch",
+      "unit": "g",
+      "category": "Baking",
+      "packageSize": 400,
+      "packagePrice": 0.8,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "cocoa-drinking",
+      "name": "Cocoa (drinking)",
+      "unit": "g",
+      "category": "Drinks",
+      "packageSize": 800,
+      "packagePrice": 4,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "caraway",
+      "name": "Caraway",
+      "unit": "g",
+      "category": "Spices"
+    },
+    {
+      "id": "ajwain-seeds",
+      "name": "Ajwain seeds",
+      "unit": "g",
+      "category": "Spices",
+      "whereToBuy": "Asia shop"
+    },
+    {
+      "id": "garlic-powder",
+      "name": "Garlic powder",
+      "unit": "g",
+      "category": "Spices"
+    },
+    {
+      "id": "black-pepper",
+      "name": "Black pepper",
+      "unit": "g",
+      "category": "Spices",
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "nutmeg-powder",
+      "name": "Nutmeg powder",
+      "unit": "g",
+      "category": "Spices"
+    },
+    {
+      "id": "vegetable-broth-powder",
+      "name": "Vegetable broth powder",
+      "unit": "g",
+      "category": "Spices"
+    },
+    {
+      "id": "msg-powder",
+      "name": "MSG powder",
+      "unit": "g",
+      "category": "Spices"
+    },
+    {
+      "id": "pasta",
+      "name": "Pasta",
+      "unit": "kg",
+      "category": "Pantry items",
+      "packageSize": 0.5,
+      "packagePrice": 0.7,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "chickpeas-drained-weight",
+      "name": "Chickpeas (drained weight)",
+      "unit": "kg",
+      "category": "Tinned food",
+      "packageSize": 265,
+      "packagePrice": 0.6,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "red-lentils",
+      "name": "Red lentils (dry)",
+      "unit": "kg",
+      "category": "Pantry items"
+    },
+    {
+      "id": "salt",
+      "name": "Salt",
+      "unit": "g",
+      "category": "Spices",
+      "packageSize": 500,
+      "packagePrice": 0.3,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "olives-drained-weight",
+      "name": "Olives (drained weight)",
+      "unit": "g",
+      "category": "Tinned food"
+    },
+    {
+      "id": "passata",
+      "name": "Passata",
+      "unit": "g",
+      "category": "Pantry items",
+      "packageSize": 500,
+      "packagePrice": 0.7,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "coconut-milk",
+      "name": "Coconut milk",
+      "unit": "L",
+      "category": "Tinned food"
+    },
+    {
+      "id": "coconut-cream",
+      "name": "Coconut cream",
+      "unit": "L",
+      "category": "Tinned food"
+    },
+    {
+      "id": "margarine",
+      "name": "Margarine",
+      "unit": "kg",
+      "category": "Pantry items",
+      "packageSize": 0.5,
+      "packagePrice": 1.6,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "soy-milk-without-sugar",
+      "name": "Soy milk (without sugar)",
+      "unit": "L",
+      "category": "Vegan milk",
+      "packageSize": 1,
+      "packagePrice": 1,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "oat-milk-without-sugar",
+      "name": "Oat milk (without sugar)",
+      "unit": "L",
+      "category": "Vegan milk",
+      "packageSize": 1,
+      "packagePrice": 1,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "rice-milk",
+      "name": "Rice milk",
+      "unit": "L",
+      "category": "Vegan milk",
+      "packageSize": 1,
+      "packagePrice": 1,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "sweet-chili-sauce-dipping",
+      "name": "Sweet chili sauce (dipping)",
+      "unit": "L",
+      "category": "Pantry items"
+    },
+    {
+      "id": "worcester-sauce",
+      "name": "Worcester sauce",
+      "unit": "ml",
+      "category": "Spices"
+    },
+    {
+      "id": "sunflower-seeds",
+      "name": "Sunflower seeds",
+      "unit": "g",
+      "category": "Nuts and seeds"
+    },
+    {
+      "id": "walnuts-crushed",
+      "name": "Walnuts (crushed)",
+      "unit": "kg",
+      "category": "Nuts and seeds"
+    },
+    {
+      "id": "spekulatius-biscuits",
+      "name": "Spekulatius biscuits",
+      "unit": "kg",
+      "category": "Pantry items"
+    },
+    {
+      "id": "tea-mixed",
+      "name": "Tea (mixed)",
+      "unit": "bags",
+      "category": "Drinks"
+    },
+    {
+      "id": "jam-mixed",
+      "name": "Jam (mixed)",
+      "unit": "g",
+      "category": "Pantry items",
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "rice-cakes",
+      "name": "Rice cakes",
+      "unit": "g",
+      "category": "Pantry items"
+    },
+    {
+      "id": "aubergine",
+      "name": "Aubergine",
+      "unit": "g",
+      "category": "Vegetables",
+      "packageSize": 500,
+      "packagePrice": 1,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "olive-oil",
+      "name": "Olive oil",
+      "unit": "ml",
+      "category": "Oil and vinegar"
+    },
+    {
+      "id": "tahini",
+      "name": "Tahini",
+      "unit": "g",
+      "category": "Nuts and seeds"
+    },
+    {
+      "id": "lemon-juice",
+      "name": "Lemon juice",
+      "unit": "ml",
+      "category": "Oil and vinegar"
+    },
+    {
+      "id": "garlic",
+      "name": "Garlic",
+      "unit": "bulb",
+      "category": "Vegetables",
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "onion",
+      "name": "Onion",
+      "unit": "g",
+      "category": "Vegetables",
+      "packageSize": 1000,
+      "packagePrice": 1.4,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "carrots",
+      "name": "Carrots",
+      "unit": "g",
+      "category": "Vegetables",
+      "packageSize": 1000,
+      "packagePrice": 1,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "minced-soy-dry",
+      "name": "Minced soy (dry)",
+      "unit": "g",
+      "category": "Pantry items",
+      "packageSize": 300,
+      "packagePrice": 2.8,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "soy-sauce",
+      "name": "Soy sauce",
+      "unit": "ml",
+      "category": "Pantry items",
+      "packageSize": 250,
+      "packagePrice": 2
+    },
+    {
+      "id": "basil-fresh",
+      "name": "Basil (fresh)",
+      "unit": "g",
+      "category": "Herbs (fresh)"
+    },
+    {
+      "id": "dried-tomato-oil-byproduct",
+      "name": "Dried tomato oil  (byproduct)",
+      "unit": "ml"
+    },
+    {
+      "id": "dried-tomatos-in-oil",
+      "name": "Dried tomatos (in oil)",
+      "unit": "g",
+      "category": "Tinned food"
+    },
+    {
+      "id": "tomato-paste",
+      "name": "Tomato paste",
+      "unit": "g",
+      "category": "Pantry items",
+      "whereToBuy": "Asia shop"
+    },
+    {
+      "id": "parsley-fresh",
+      "name": "Parsley (fresh)",
+      "unit": "g",
+      "category": "Herbs (fresh)"
+    },
+    {
+      "id": "chives-fresh",
+      "name": "Chives (fresh)",
+      "unit": "g",
+      "category": "Herbs (fresh)"
+    },
+    {
+      "id": "water",
+      "name": "Water",
+      "unit": "ml"
+    },
+    {
+      "id": "amaretto",
+      "name": "Amaretto",
+      "unit": "ml",
+      "category": "Drinks"
+    },
+    {
+      "id": "rum",
+      "name": "Rum",
+      "unit": "ml",
+      "category": "Drinks"
+    },
+    {
+      "id": "sugarcane-syrup",
+      "name": "Sugarcane syrup",
+      "unit": "ml",
+      "category": "Baking"
+    },
+    {
+      "id": "spekulatius-spice",
+      "name": "Spekulatius spice",
+      "unit": "g",
+      "category": "Spices"
+    },
+    {
+      "id": "broccoli",
+      "name": "Broccoli",
+      "unit": "g",
+      "category": "Vegetables",
+      "packageSize": 500,
+      "packagePrice": 1.5,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "ginger",
+      "name": "Ginger",
+      "unit": "g",
+      "category": "Vegetables",
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "shiitake-mushrooms",
+      "name": "Shiitake mushrooms",
+      "unit": "g",
+      "category": "Vegetables"
+    },
+    {
+      "id": "rice-dry",
+      "name": "Rice (dry)",
+      "unit": "g",
+      "category": "Pantry items",
+      "packageSize": 1,
+      "packagePrice": 2.5
+    },
+    {
+      "id": "rice-vinigar-mirin",
+      "name": "Rice vinegar (mirin)",
+      "unit": "ml",
+      "category": "Oil and vinegar"
+    },
+    {
+      "id": "bell-pepper",
+      "name": "Bell pepper",
+      "unit": "g",
+      "category": "Vegetables",
+      "packageSize": 500,
+      "packagePrice": 2.5,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "tofu",
+      "name": "Tofu",
+      "unit": "g",
+      "category": "Refrigerated items"
+    },
+    {
+      "id": "bean-sprouts",
+      "name": "Bean sprouts",
+      "unit": "g",
+      "category": "Herbs (fresh)"
+    },
+    {
+      "id": "brown-sugar",
+      "name": "Brown sugar",
+      "unit": "g",
+      "category": "Baking",
+      "packageSize": 1000,
+      "packagePrice": 2,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "spring-onion",
+      "name": "Spring onion",
+      "unit": "g",
+      "category": "Vegetables",
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "enokii-mushrooms",
+      "name": "Enokii mushrooms",
+      "unit": "g",
+      "category": "Vegetables"
+    },
+    {
+      "id": "vegan-mushroom-stir-fry-sauce",
+      "name": "Vegan mushroom stir fry sauce",
+      "unit": "ml",
+      "category": "Spices"
+    },
+    {
+      "id": "edamame-peeled",
+      "name": "Edamame (peeled)",
+      "unit": "g",
+      "category": "Refrigerated items"
+    },
+    {
+      "id": "seawheat-sheets",
+      "name": "Seawheat sheets",
+      "unit": "g",
+      "category": "Pantry items"
+    },
+    {
+      "id": "sesame-seeds",
+      "name": "Sesame seeds",
+      "unit": "g",
+      "category": "Nuts and seeds"
+    },
+    {
+      "id": "potatoes",
+      "name": "Potatoes",
+      "unit": "g",
+      "category": "Vegetables",
+      "packageSize": 2000,
+      "packagePrice": 2.7,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "zucchini",
+      "name": "Zucchini",
+      "unit": "g",
+      "category": "Vegetables",
+      "packageSize": 350,
+      "packagePrice": 0.8,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "oat-milk",
+      "name": "Oat milk",
+      "unit": "L",
+      "category": "Vegan milk",
+      "packageSize": 1,
+      "packagePrice": 1,
+      "whereToBuy": "Supermarket"
+    },
+    {
+      "id": "soy-milk",
+      "name": "Soy milk",
+      "unit": "L",
+      "category": "Vegan milk",
+      "packageSize": 1,
+      "packagePrice": 1,
+      "whereToBuy": "Supermarket"
+    }
   ]
 }

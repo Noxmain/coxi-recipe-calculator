@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "fried-potatoes",
+  "name": "Fried potatoes",
+  "type": "main",
+  "servings": 1,
+  "portionWeight": 100,
+  "ingredients": [
+    {
+      "ingredientId": "broccoli",
+      "amount": 33
+    },
+    {
+      "ingredientId": "potatoes",
+      "amount": 53
+    },
+    {
+      "ingredientId": "garlic",
+      "amount": 0.02
+    },
+    {
+      "ingredientId": "bell-pepper",
+      "amount": 10
+    },
+    {
+      "ingredientId": "parsley-fresh",
+      "amount": 3
+    },
+    {
+      "ingredientId": "tofu",
+      "amount": 13
+    },
+    {
+      "ingredientId": "zucchini",
+      "amount": 13
+    },
+    {
+      "ingredientId": "onion",
+      "amount": 20
+    },
+    {
+      "ingredientId": "plant-oil",
+      "amount": 0.02
+    }
+  ],
+  "steps": [
+    "Preparation:\n1. Marinate the tofu at least 1 hour before\n2. Cook the potatoes and let them cool completely \n3. Blanche the brokenly\n4. Cut the vegetables \n5. Start Frying the vegetables (Onions-> Zucchini, bell peppers -> brokenly -> garlic)\n6. Take the veggies out of the pan and fry the tofu\n7. Take the tofu out of the pan and fry the potatoes till they are crunchy then add the rest into the pan again\nTipps:\n• You can also do all of this in the oven, just add all the ingredients and let them cook for ~ 1 hour"
+  ]
+}

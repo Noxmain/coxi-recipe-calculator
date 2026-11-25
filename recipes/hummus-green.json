@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "id": "hummus-green",
+  "name": "Hummus green",
+  "type": "spread",
+  "servings": 1,
+  "portionWeight": 100,
+  "ingredients": [
+    {
+      "ingredientId": "basil-fresh",
+      "amount": 20
+    },
+    {
+      "ingredientId": "chickpeas-drained-weight",
+      "amount": 0.07
+    },
+    {
+      "ingredientId": "garlic",
+      "amount": 0.02
+    },
+    {
+      "ingredientId": "olive-oil",
+      "amount": 7
+    },
+    {
+      "ingredientId": "parsley-fresh",
+      "amount": 15
+    },
+    {
+      "ingredientId": "salt",
+      "amount": 1
+    },
+    {
+      "ingredientId": "tahini",
+      "amount": 15
+    },
+    {
+      "ingredientId": "lemon-juice",
+      "amount": 3
+    },
+    {
+      "ingredientId": "water",
+      "amount": 7
+    }
+  ],
+  "steps": [
+    "Mix oil, tahini, garlic, and additions",
+    "Add chickpeas and herbs",
+    "Blend everything",
+    "Add lemon juice and spices for consistency",
+    "Tips:\n- If you have a meat grinder the texture of the hummus will be improved"
+  ]
+}

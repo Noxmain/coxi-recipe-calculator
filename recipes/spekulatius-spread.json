@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "spekulatius-spread",
+  "name": "Spekulatius spread",
+  "type": "spread",
+  "servings": 1,
+  "portionWeight": 100,
+  "ingredients": [
+    {
+      "ingredientId": "spekulatius-biscuits",
+      "amount": 0.057
+    },
+    {
+      "ingredientId": "amaretto",
+      "amount": 5
+    },
+    {
+      "ingredientId": "margarine",
+      "amount": 0.013
+    },
+    {
+      "ingredientId": "rum",
+      "amount": 1
+    },
+    {
+      "ingredientId": "sugarcane-syrup",
+      "amount": 6
+    },
+    {
+      "ingredientId": "spekulatius-spice",
+      "amount": 2
+    }
+  ],
+  "steps": [
+    "Crush the spekulatius biscuits finely (use a food processor if you like)",
+    "Add rum, amaretto, and water to achieve a lightly wet sand texture",
+    "Let it rest for 30 minutes",
+    "Mix with margarine, sugarcane syrup and spekulatius spice",
+    "Tips:\n- You can add more rum and / or amaretto if you like\n- Just try and see what works best"
+  ]
+}
